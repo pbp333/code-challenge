@@ -1,6 +1,6 @@
 # Commit Viewer
 
-(TODO) Commit Viewer deescription
+Simple Git public repositories commit viewer.
 
 ## Instalation
 
@@ -9,6 +9,7 @@
 ## Usage
 
 (TODO) Usage description
+API
 
 ## Architecture
 
