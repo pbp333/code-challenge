@@ -31,4 +31,146 @@ public class CommitTest {
 
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void exceptionWhenShaIsNull() {
+
+        // Given
+        String sha = null;
+        String message = RandomString.make(10);
+        LocalDateTime date = LocalDateTime.now();
+        String authorName = RandomString.make(10);
+
+        // When
+        Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void exceptionWhenShaIsEmpty() {
+
+        // Given
+        String sha = "";
+        String message = RandomString.make(10);
+        LocalDateTime date = LocalDateTime.now();
+        String authorName = RandomString.make(10);
+
+        // When
+        Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void exceptionWhenShaIsBlank() {
+
+        // Given
+        String sha = "     ";
+        String message = RandomString.make(10);
+        LocalDateTime date = LocalDateTime.now();
+        String authorName = RandomString.make(10);
+
+        // When
+        Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void exceptionWhenMessageIsNull() {
+
+        // Given
+        String sha = RandomString.make(10);
+        String message = null;
+        LocalDateTime date = LocalDateTime.now();
+        String authorName = RandomString.make(10);
+
+        // When
+        Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void exceptionWhenMessageIsEmpty() {
+
+        // Given
+        String sha = RandomString.make(10);
+        String message = "";
+        LocalDateTime date = LocalDateTime.now();
+        String authorName = RandomString.make(10);
+
+        // When
+        Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void exceptionWhenMessageIsBlank() {
+
+        // Given
+        String sha = RandomString.make(10);
+        String message = "      ";
+        LocalDateTime date = LocalDateTime.now();
+        String authorName = RandomString.make(10);
+
+        // When
+        Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+
+    }
+
+
+    @Test(expected = IllegalStateException.class)
+    public void exceptionWhenDateIsNull() {
+
+        // Given
+        String sha = RandomString.make(10);
+        String message = RandomString.make(10);
+        LocalDateTime date = null;
+        String authorName = RandomString.make(10);
+
+        // When
+        Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void exceptionWhenAuthorNameIsNull() {
+
+        // Given
+        String sha = RandomString.make(10);
+        String message = RandomString.make(10);
+        LocalDateTime date = LocalDateTime.now();
+        String authorName = null;
+
+        // When
+        Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void exceptionWhenAuthorNameIsEmpty() {
+
+        // Given
+        String sha = RandomString.make(10);
+        String message = RandomString.make(10);
+        LocalDateTime date = LocalDateTime.now();
+        String authorName = "";
+
+        // When
+        Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void exceptionWhenAuthorNameIsBlank() {
+
+        // Given
+        String sha = RandomString.make(10);
+        String message = RandomString.make(10);
+        LocalDateTime date = LocalDateTime.now();
+        String authorName = "     ";
+
+        // When
+        Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+
+    }
+
+
 }

@@ -1,15 +1,15 @@
-package com.codechallenge.commitviewer.domain;
+package com.codechallenge.commitviewer.application.api.dto;
 
 import java.time.LocalDateTime;
 
-public class Commit {
+public class CommitDto {
 
     private final String sha;
     private final String message;
     private final LocalDateTime date;
     private final String authorName;
 
-    private Commit(Builder builder) {
+    private CommitDto(Builder builder) {
         this.sha = builder.sha;
         this.message = builder.message;
         this.date = builder.date;
@@ -62,35 +62,8 @@ public class Commit {
             return this;
         }
 
-        public Commit build() {
-
-            validateSha();
-            validateMessage();
-            validateDate();
-            validateAuthorName();
-
-            return new Commit(this);
-        }
-
-        private void validateSha() {
-            if (this.sha == null || this.sha.isBlank())
-                throw new IllegalStateException("Sha is invalid");
-        }
-
-        private void validateMessage() {
-            if (this.message == null || this.message.isBlank())
-                throw new IllegalStateException("Message is invalid");
-        }
-
-        private void validateDate() {
-            if (this.date == null)
-                throw new IllegalStateException("Date is invalid");
-
-        }
-
-        private void validateAuthorName() {
-            if (this.authorName == null || this.authorName.isBlank())
-                throw new IllegalStateException("Author Name is invalid");
+        public CommitDto build() {
+            return new CommitDto(this);
         }
     }
 
