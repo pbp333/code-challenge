@@ -8,6 +8,8 @@ import com.codechallenge.commitviewer.application.port.CommitRetriverStrategy;
 
 public class RestCommitRetrieverAdapter implements CommitRetrieverPort {
 
+
+
     @Override
     public CommitRetriverStrategy getStrategy() {
         return CommitRetriverStrategy.REST;
@@ -15,8 +17,12 @@ public class RestCommitRetrieverAdapter implements CommitRetrieverPort {
 
     @Override
     public List<CommitDto> getCommits(String repositoryUrl) {
-        // TODO Auto-generated method stub
+
+        String commitsApiUrl = GitHubApiUtil.buildCommitsApiUrlFromRepositoryUrl(repositoryUrl);
+
+
         return null;
     }
+
 
 }

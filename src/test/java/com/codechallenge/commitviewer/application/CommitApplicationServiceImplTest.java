@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.codechallenge.commitviewer.application.api.dto.CommitDto;
-import com.codechallenge.commitviewer.application.api.dto.CommitDtoFixture;
+import com.codechallenge.commitviewer.application.api.dto.CommitDtoUtil;
 import com.codechallenge.commitviewer.infrastructure.rest.RestCommitRetrieverAdapter;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -36,7 +36,7 @@ public class CommitApplicationServiceImplTest {
         // Given
         String repositoryUrl = "random_url";
 
-        List<CommitDto> commits = Arrays.asList(CommitDtoFixture.get());
+        List<CommitDto> commits = Arrays.asList(CommitDtoUtil.getRandom());
 
         when(restAdapter.getCommits(any(String.class))).thenReturn(commits);
 

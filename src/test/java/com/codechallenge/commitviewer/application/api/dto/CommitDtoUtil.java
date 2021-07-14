@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 
-public class CommitDtoFixture {
+public class CommitDtoUtil {
 
-    public static CommitDto get() {
+    public static CommitDto getRandom() {
 
         String sha = RandomString.make(10);
         String message = RandomString.make(10);

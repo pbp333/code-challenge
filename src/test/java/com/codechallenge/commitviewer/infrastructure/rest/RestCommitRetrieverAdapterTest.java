@@ -10,7 +10,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.codechallenge.commitviewer.application.port.CommitRetriverStrategy;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CliCommitRetrieverAdapterTest {
+public class RestCommitRetrieverAdapterTest {
 
     private RestCommitRetrieverAdapter adapter;
 
