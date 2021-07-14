@@ -12,7 +12,7 @@ import com.codechallenge.commitviewer.application.port.CommitRetriverStrategy;
 @RunWith(MockitoJUnitRunner.class)
 public class CliCommitRetrieverAdapterTest {
 
-    RestCommitRetrieverAdapter adapter;
+    private RestCommitRetrieverAdapter adapter;
 
     @Before
     public void setup() {

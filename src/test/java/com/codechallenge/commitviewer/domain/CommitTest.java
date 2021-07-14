@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDateTime;
 
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 public class CommitTest {
 
