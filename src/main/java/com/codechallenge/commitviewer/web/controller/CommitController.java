@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codechallenge.commitviewer.application.api.CommitApplicationService;
 import com.codechallenge.commitviewer.application.api.dto.CommitDto;
+import com.codechallenge.commitviewer.application.api.request.PaginatedRequest;
 import com.codechallenge.commitviewer.web.json.CommitJson;
 import com.codechallenge.commitviewer.web.json.JsonMapper;
 import com.codechallenge.commitviewer.web.request.PagingParam;
@@ -32,7 +33,10 @@ public class CommitController {
     @ResponseStatus(HttpStatus.OK)
     public List<CommitJson> getCommits(@RequestParam("url") String repositoryUrl, PagingParam pagingParam) {
 
-        List<CommitDto> commits = service.getCommits(repositoryUrl);
+        var request = PaginatedRequest.<String>builder().request(repositoryUrl).page(pagingParam.getPage())
+                .size(pagingParam.getSize()).build();
+
+        List<CommitDto> commits = service.getCommits(request);
 
         return commits.stream().map(JsonMapper::map).collect(Collectors.toList());
 

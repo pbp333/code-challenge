@@ -19,7 +19,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         var mapper = new ApiObjectMapper();
         mapper.setDateFormat(new SimpleDateFormat("dd-MM-yyyy hh:mm"));
 
-        var apiMessageConverter = new MappingJackson2HttpMessageConverter(new ApiObjectMapper());
+        var apiMessageConverter = new MappingJackson2HttpMessageConverter(mapper);
 
         converters.add(apiMessageConverter);
 

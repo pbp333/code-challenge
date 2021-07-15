@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.codechallenge.commitviewer.application.api.dto.CommitDto;
+import com.codechallenge.commitviewer.application.api.request.PaginatedRequest;
 import com.codechallenge.commitviewer.application.port.CommitRetrieverPort;
 import com.codechallenge.commitviewer.application.port.CommitRetriverStrategy;
 import com.codechallenge.commitviewer.infrastructure.rest.json.GitHubCommitResponse;
@@ -33,13 +34,14 @@ public class RestCommitRetrieverAdapter implements CommitRetrieverPort {
     }
 
     @Override
-    public List<CommitDto> getCommits(String repositoryUrl) {
+    public List<CommitDto> getCommits(PaginatedRequest<String> request) {
 
         // TODO add pagination
 
         try {
 
-            String commitsApiUrl = GitHubApiUtil.buildCommitsApiUrlFromRepositoryUrl(repositoryUrl);
+            String commitsApiUrl = GitHubApiUtil.buildCommitsApiUrlFromRepositoryUrlWithPagination(request.getRequest(),
+                    request.getPage(), request.getSize());
 
             ResponseEntity<GitHubCommitResponse[]> response = restTemplate.exchange(commitsApiUrl, HttpMethod.GET,
                     new HttpEntity<>(new HttpHeaders()), GitHubCommitResponse[].class);
