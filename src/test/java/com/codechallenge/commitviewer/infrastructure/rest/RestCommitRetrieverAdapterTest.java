@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import org.junit.Before;
@@ -34,8 +35,14 @@ public class RestCommitRetrieverAdapterTest {
     private RestCommitRetrieverAdapter adapter;
 
     @Before
-    public void setup() {
-        adapter = new RestCommitRetrieverAdapter(restTemplate);
+    public void setup() throws Exception {
+        adapter = new RestCommitRetrieverAdapter();
+
+        // TODO change architecture to avoid using reflection
+        Field adapterRestTemplate = adapter.getClass().getDeclaredField("restTemplate");
+        adapterRestTemplate.setAccessible(true);
+
+        adapterRestTemplate.set(adapter, restTemplate);
     }
 
     @Test

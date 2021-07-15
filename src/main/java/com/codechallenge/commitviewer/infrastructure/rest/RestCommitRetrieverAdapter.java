@@ -23,8 +23,8 @@ public class RestCommitRetrieverAdapter implements CommitRetrieverPort {
     private final RestTemplate restTemplate;
 
     @Autowired
-    public RestCommitRetrieverAdapter(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public RestCommitRetrieverAdapter() {
+        this.restTemplate = new RestTemplate();
     }
 
     @Override

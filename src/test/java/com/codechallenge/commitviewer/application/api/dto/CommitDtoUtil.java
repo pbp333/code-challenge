@@ -16,4 +16,14 @@ public class CommitDtoUtil {
         return CommitDto.builder().sha(sha).message(message).date(date).authorName(authorName).build();
     }
 
+    public static CommitDto getStatic() {
+
+        String sha = "sha-123456";
+        String message = "message 123";
+        LocalDateTime date = LocalDateTime.parse("2021-07-15T15:14:13.373180");
+        String authorName = "Author Name";
+
+        return CommitDto.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+    }
+
 }
