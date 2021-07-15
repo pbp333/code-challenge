@@ -23,20 +23,9 @@ public class GitHubJsonMapperTest {
         assertThat(commit.getSha()).isEqualTo(gitHubCommit.getSha());
         assertThat(commit.getMessage()).isEqualTo(gitHubCommit.getCommit().getMessage());
 
-        assertThat(commit.getDate()).isEqualTo(gitHubCommit.getCommit().getAuthor().getDate());
+        assertThat(commit.getDate()).isEqualTo(gitHubCommit.getCommit().getCommitter().getDate());
 
-        assertThat(commit.getAuthorName()).isEqualTo(gitHubCommit.getCommit().getAuthor().getName());
-
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void exceptionWhenArgumentIsNull() {
-
-        // Given
-        GitHubCommitResponse gitHubCommit = null;
-
-        // When
-        GitHubJsonMapper.map(gitHubCommit);
+        assertThat(commit.getAuthorName()).isEqualTo(gitHubCommit.getCommit().getCommitter().getName());
 
     }
 

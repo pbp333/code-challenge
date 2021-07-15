@@ -11,15 +11,12 @@ public class GitHubJsonMapper {
 
     public static CommitDto map(GitHubCommitResponse gitHubCommit) {
 
-        if (gitHubCommit == null)
-            throw new IllegalArgumentException("GitHub commit is invalid");
-
         var builder = CommitDto.builder();
 
         builder.sha(gitHubCommit.getSha());
         builder.message(gitHubCommit.getCommit().getMessage());
-        builder.date(gitHubCommit.getCommit().getAuthor().getDate());
-        builder.authorName(gitHubCommit.getCommit().getAuthor().getName());
+        builder.date(gitHubCommit.getCommit().getCommitter().getDate());
+        builder.authorName(gitHubCommit.getCommit().getCommitter().getName());
 
         return builder.build();
 
