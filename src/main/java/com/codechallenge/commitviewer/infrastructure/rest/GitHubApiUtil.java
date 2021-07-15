@@ -10,8 +10,8 @@ public class GitHubApiUtil {
 
     public static String buildCommitsApiUrlFromRepositoryUrl(String repositoryUrl) {
 
-        String repositoryName = extractRepositoryName(repositoryUrl);
         String ownerName = extractOwnerName(repositoryUrl);
+        String repositoryName = extractRepositoryName(repositoryUrl);
 
         return String.format(GITHUB_API_URL_PATTERN, ownerName, repositoryName);
 
