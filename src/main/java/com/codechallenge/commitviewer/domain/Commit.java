@@ -2,6 +2,8 @@ package com.codechallenge.commitviewer.domain;
 
 import java.time.LocalDateTime;
 
+import com.codechallenge.commitviewer.application.exception.BusinessException;
+
 public class Commit {
 
     private final String sha;
@@ -74,23 +76,23 @@ public class Commit {
 
         private void validateSha() {
             if (this.sha == null || this.sha.isBlank())
-                throw new IllegalStateException("Sha is invalid");
+                throw new BusinessException("Sha is invalid");
         }
 
         private void validateMessage() {
             if (this.message == null || this.message.isBlank())
-                throw new IllegalStateException("Message is invalid");
+                throw new BusinessException("Message is invalid");
         }
 
         private void validateDate() {
             if (this.date == null)
-                throw new IllegalStateException("Date is invalid");
+                throw new BusinessException("Date is invalid");
 
         }
 
         private void validateAuthorName() {
             if (this.authorName == null || this.authorName.isBlank())
-                throw new IllegalStateException("Author Name is invalid");
+                throw new BusinessException("Author Name is invalid");
         }
     }
 

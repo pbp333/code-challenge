@@ -25,10 +25,6 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
     private static final String TMP_FOLDER_PREFIX = "tmp";
     private static final String EXCEPTION_MESSAGE = "Could not retrieve GitHub repository commits through the CLI";
 
-    private static final String[] GIT_LOG_COMMANDS = {"git", "log", "--pretty=%H-%cn-%ct-%s "};
-    private static final String[] LS_COMMAND = {"ls"};
-
-
     @Override
     public CommitRetriverStrategy getStrategy() {
         return CommitRetriverStrategy.CLI;
@@ -38,15 +34,15 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
     public List<CommitDto> getCommits(PaginatedRequest<String> request) {
 
         try {
+
             var tmpFolder = Files.createTempDirectory(TMP_FOLDER_PREFIX);
 
             createGitRepository(request, tmpFolder);
-
             var repoFolderName = getRepoFolderName(tmpFolder);
 
             var repoFolder = new File(tmpFolder.toAbsolutePath().toString().concat("/").concat(repoFolderName));
 
-            var commitList = getCommitList(repoFolder);
+            var commitList = getCommitList(repoFolder, request.getPage(), request.getSize());
 
             removeFolder(tmpFolder.toFile());
 
@@ -57,10 +53,19 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
         }
     }
 
-    private List<String> getCommitList(File repoFolder) {
+    private List<String> getCommitList(File repoFolder, int page, int size) {
 
         try {
-            var gitLogBuilder = new ProcessBuilder(GIT_LOG_COMMANDS);
+
+            var numberOfCommitsToSkip = size * page;
+
+            var sizeArgument = String.format("--max-count=%n", size);
+            var numberOfCommitsToSkipArgument = String.format("--skip=%n", numberOfCommitsToSkip);
+
+            String[] gitLogCommands =
+                    {"git", "log", "--pretty=%H-%cn-%ct-%s", sizeArgument, numberOfCommitsToSkipArgument};
+
+            var gitLogBuilder = new ProcessBuilder(gitLogCommands);
             gitLogBuilder = gitLogBuilder.directory(repoFolder);
 
             var gitLogProcess = gitLogBuilder.start();
@@ -90,7 +95,10 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
     private String getRepoFolderName(Path tmpFolder) {
 
         try {
-            var lsCommandBuilder = new ProcessBuilder(LS_COMMAND);
+
+            String[] lsCommand = {"ls"};
+
+            var lsCommandBuilder = new ProcessBuilder(lsCommand);
             lsCommandBuilder = lsCommandBuilder.directory(tmpFolder.toFile());
 
             var lsCommandProc = lsCommandBuilder.start();
@@ -116,6 +124,7 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
         try {
 
             String[] gitCloneCommand = {"git", "clone", request.getRequest()};
+
             var gitCloneCommandBuilder = new ProcessBuilder(gitCloneCommand);
             gitCloneCommandBuilder = gitCloneCommandBuilder.directory(tmpFolder.toFile());
 
