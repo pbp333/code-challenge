@@ -25,6 +25,10 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
     private static final String TMP_FOLDER_PREFIX = "tmp";
     private static final String EXCEPTION_MESSAGE = "Could not retrieve GitHub repository commits through the CLI";
 
+    private static final String[] GIT_LOG_COMMANDS = {"git", "log", "--pretty=%H-%cn-%ct-%s "};
+    private static final String[] LS_COMMAND = {"ls"};
+
+
     @Override
     public CommitRetriverStrategy getStrategy() {
         return CommitRetriverStrategy.CLI;
@@ -56,8 +60,7 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
     private List<String> getCommitList(File repoFolder) {
 
         try {
-            String[] gitLogCommand = {"git", "log", "--pretty=\"%H-%cn-%ct-%s\""};
-            var gitLogBuilder = new ProcessBuilder(gitLogCommand);
+            var gitLogBuilder = new ProcessBuilder(GIT_LOG_COMMANDS);
             gitLogBuilder = gitLogBuilder.directory(repoFolder);
 
             var gitLogProcess = gitLogBuilder.start();
@@ -65,15 +68,21 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
 
             List<String> log = new ArrayList<>();
 
-            var line = "";
+            var line = " ";
 
             while ((line = reader.readLine()) != null) {
                 log.add(line);
             }
 
+            if (gitLogProcess.waitFor() != 0)
+                throw new TechnicalException("Cli commit retriever - could not retrieve commit list");
+
+            gitLogProcess.destroy();
+            reader.close();
+
             return log;
 
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             throw new TechnicalException(EXCEPTION_MESSAGE, e);
         }
     }
@@ -81,16 +90,22 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
     private String getRepoFolderName(Path tmpFolder) {
 
         try {
-            String[] lsCommand = {"ls"};
-            var lsCommandBuilder = new ProcessBuilder(lsCommand);
+            var lsCommandBuilder = new ProcessBuilder(LS_COMMAND);
             lsCommandBuilder = lsCommandBuilder.directory(tmpFolder.toFile());
 
             var lsCommandProc = lsCommandBuilder.start();
             var reader = new BufferedReader(new InputStreamReader(lsCommandProc.getInputStream()));
 
-            return reader.readLine();
+            var line = reader.readLine();
 
-        } catch (IOException e) {
+            if (lsCommandProc.waitFor() != 0)
+                throw new TechnicalException("Cli commit retriever - could not retrieve tmp folder");
+
+            lsCommandProc.destroy();
+
+            return line;
+
+        } catch (IOException | InterruptedException e) {
             throw new TechnicalException(EXCEPTION_MESSAGE, e);
 
         }
@@ -100,13 +115,18 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
 
         try {
 
-            String[] gitCloneCommand = {"git", "clone", "--depth", "1", request.getRequest()};
+            String[] gitCloneCommand = {"git", "clone", request.getRequest()};
             var gitCloneCommandBuilder = new ProcessBuilder(gitCloneCommand);
             gitCloneCommandBuilder = gitCloneCommandBuilder.directory(tmpFolder.toFile());
 
-            gitCloneCommandBuilder.start();
+            var gitCloneProcess = gitCloneCommandBuilder.start();
 
-        } catch (IOException e) {
+            if (gitCloneProcess.waitFor() != 0)
+                throw new TechnicalException("Cli commit retriever - could not clone repository");
+
+            gitCloneProcess.destroy();
+
+        } catch (IOException | InterruptedException e) {
 
             throw new TechnicalException(EXCEPTION_MESSAGE, e);
 

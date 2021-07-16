@@ -17,6 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.codechallenge.commitviewer.application.api.dto.CommitDto;
 import com.codechallenge.commitviewer.application.api.dto.CommitDtoUtil;
 import com.codechallenge.commitviewer.application.api.request.PaginatedRequest;
+import com.codechallenge.commitviewer.infrastructure.cli.CliCommitRetrieverAdapter;
 import com.codechallenge.commitviewer.infrastructure.rest.RestCommitRetrieverAdapter;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,11 +26,14 @@ public class CommitApplicationServiceImplTest {
     @Mock
     private RestCommitRetrieverAdapter restAdapter;
 
+    @Mock
+    private CliCommitRetrieverAdapter cliAdapter;
+
     private CommitApplicationServiceImpl service;
 
     @Before
     public void setup() {
-        this.service = new CommitApplicationServiceImpl(restAdapter);
+        this.service = new CommitApplicationServiceImpl(restAdapter, cliAdapter);
     }
 
     @SuppressWarnings("unchecked")
