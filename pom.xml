@@ -20,7 +20,7 @@
 	
 	<properties>
 		<java.version>11</java.version>
-		<junit.version>4.9</junit.version>
+		<junit.version>4.12</junit.version>
 		<h2.version>1.4.200</h2.version>
 		<jacoco.version>0.8.4</jacoco.version>
 		<javacrumbs.json-unit.version>1.19.0</javacrumbs.json-unit.version>

@@ -87,7 +87,6 @@ public class RestCommitRetrieverAdapterTest {
 
     }
 
-    @SuppressWarnings("unchecked")
     @Test(expected = TechnicalException.class)
     public void exceptionGettingCommitsFromGitHub() {
 
@@ -97,8 +96,6 @@ public class RestCommitRetrieverAdapterTest {
         int size = new Random().nextInt(100);
 
         var paginatedRequest = PaginatedRequest.<String>builder().request(repositoryUrl).page(page).size(size).build();
-
-        ResponseEntity<GitHubCommitResponse[]> response = mock(ResponseEntity.class);
 
         GitHubCommitResponse[] gitHubResponse = {JsonUtil.getRandomGitHubCommitResponse()};
 
