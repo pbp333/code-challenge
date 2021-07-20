@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.Test;
 
+import com.codechallenge.commitviewer.application.exception.BusinessException;
+
 public class CommitTest {
 
     @Test
@@ -31,7 +33,7 @@ public class CommitTest {
 
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = BusinessException.class)
     public void exceptionWhenShaIsNull() {
 
         // Given
@@ -45,7 +47,7 @@ public class CommitTest {
 
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = BusinessException.class)
     public void exceptionWhenShaIsEmpty() {
 
         // Given
@@ -59,7 +61,7 @@ public class CommitTest {
 
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = BusinessException.class)
     public void exceptionWhenShaIsBlank() {
 
         // Given
@@ -73,7 +75,7 @@ public class CommitTest {
 
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = BusinessException.class)
     public void exceptionWhenMessageIsNull() {
 
         // Given
@@ -87,7 +89,7 @@ public class CommitTest {
 
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = BusinessException.class)
     public void exceptionWhenMessageIsEmpty() {
 
         // Given
@@ -101,7 +103,7 @@ public class CommitTest {
 
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = BusinessException.class)
     public void exceptionWhenMessageIsBlank() {
 
         // Given
@@ -116,7 +118,7 @@ public class CommitTest {
     }
 
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = BusinessException.class)
     public void exceptionWhenDateIsNull() {
 
         // Given
@@ -130,7 +132,7 @@ public class CommitTest {
 
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = BusinessException.class)
     public void exceptionWhenAuthorNameIsNull() {
 
         // Given
@@ -144,7 +146,7 @@ public class CommitTest {
 
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = BusinessException.class)
     public void exceptionWhenAuthorNameIsEmpty() {
 
         // Given
@@ -158,7 +160,7 @@ public class CommitTest {
 
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = BusinessException.class)
     public void exceptionWhenAuthorNameIsBlank() {
 
         // Given

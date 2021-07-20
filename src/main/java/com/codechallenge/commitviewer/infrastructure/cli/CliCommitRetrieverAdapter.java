@@ -1,13 +1,7 @@
 package com.codechallenge.commitviewer.infrastructure.cli;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +17,15 @@ import com.codechallenge.commitviewer.application.port.CommitRetriverStrategy;
 public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
 
     private static final String TMP_FOLDER_PREFIX = "tmp";
-    private static final String EXCEPTION_MESSAGE = "Could not retrieve GitHub repository commits through the CLI";
+    private static final String EXCEPTION_MESSAGE = "Unable to retrieve commit list via CLI";
+
+    private final CommandLineInterface cli;
+    private final FileManager fileManager;
+
+    public CliCommitRetrieverAdapter(CommandLineInterface cli, FileManager fileManager) {
+        this.cli = cli;
+        this.fileManager = fileManager;
+    }
 
     @Override
     public CommitRetriverStrategy getStrategy() {
@@ -33,23 +35,30 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
     @Override
     public List<CommitDto> getCommits(PaginatedRequest<String> request) {
 
+        var tmpFolder = createRepositoryFolder();
+
+        createGitRepository(request.getRequest(), tmpFolder);
+
+        var repoFolderName = getRepoFolderName(tmpFolder);
+
+        var repoFolder = new File(tmpFolder.getAbsolutePath().concat("/").concat(repoFolderName));
+
+        var commitList = getCommitList(repoFolder, request.getPage(), request.getSize());
+
+        fileManager.removeTemporaryFolderAndContents(tmpFolder);
+
+        return commitList.stream().map(CliCommitParser::parse).collect(Collectors.toList());
+
+    }
+
+    private File createRepositoryFolder() {
+
         try {
 
-            var tmpFolder = Files.createTempDirectory(TMP_FOLDER_PREFIX);
-
-            createGitRepository(request, tmpFolder);
-            var repoFolderName = getRepoFolderName(tmpFolder);
-
-            var repoFolder = new File(tmpFolder.toAbsolutePath().toString().concat("/").concat(repoFolderName));
-
-            var commitList = getCommitList(repoFolder, request.getPage(), request.getSize());
-
-            removeFolder(tmpFolder.toFile());
-
-            return commitList.stream().map(CliCommitParser::parse).collect(Collectors.toList());
+            return fileManager.createTemporaryFolder(TMP_FOLDER_PREFIX);
 
         } catch (IOException e) {
-            throw new TechnicalException(EXCEPTION_MESSAGE, e);
+            throw new TechnicalException("Unable to create temporary folder for git repository", e);
         }
     }
 
@@ -65,92 +74,47 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
             String[] gitLogCommands =
                     {"git", "log", "--pretty=%H-%cn-%ct-%s", sizeArgument, numberOfCommitsToSkipArgument};
 
-            var gitLogBuilder = new ProcessBuilder(gitLogCommands);
-            gitLogBuilder = gitLogBuilder.directory(repoFolder);
+            return cli.excuteCommand(gitLogCommands, repoFolder);
 
-            var gitLogProcess = gitLogBuilder.start();
-            var reader = new BufferedReader(new InputStreamReader(gitLogProcess.getInputStream()));
-
-            List<String> log = new ArrayList<>();
-
-            var line = " ";
-
-            while ((line = reader.readLine()) != null) {
-                log.add(line);
-            }
-
-            if (gitLogProcess.waitFor() != 0)
-                throw new TechnicalException("Cli commit retriever - could not retrieve commit list");
-
-            gitLogProcess.destroy();
-            reader.close();
-
-            return log;
 
         } catch (IOException | InterruptedException e) {
             throw new TechnicalException(EXCEPTION_MESSAGE, e);
         }
     }
 
-    private String getRepoFolderName(Path tmpFolder) {
+    private String getRepoFolderName(File tmpFolder) {
 
         try {
 
             String[] lsCommand = {"ls"};
 
-            var lsCommandBuilder = new ProcessBuilder(lsCommand);
-            lsCommandBuilder = lsCommandBuilder.directory(tmpFolder.toFile());
+            List<String> cliResponse = cli.excuteCommand(lsCommand, tmpFolder);
 
-            var lsCommandProc = lsCommandBuilder.start();
-            var reader = new BufferedReader(new InputStreamReader(lsCommandProc.getInputStream()));
+            if (cliResponse.size() != 1)
+                throw new TechnicalException("Cli commit retriever - could not retrieve repository git folder");
 
-            var line = reader.readLine();
-
-            if (lsCommandProc.waitFor() != 0)
-                throw new TechnicalException("Cli commit retriever - could not retrieve tmp folder");
-
-            lsCommandProc.destroy();
-
-            return line;
+            return cliResponse.get(0);
 
         } catch (IOException | InterruptedException e) {
+
             throw new TechnicalException(EXCEPTION_MESSAGE, e);
 
         }
     }
 
-    private void createGitRepository(PaginatedRequest<String> request, Path tmpFolder) {
+    private void createGitRepository(String repositoryUrl, File tmpFolder) {
 
         try {
 
-            String[] gitCloneCommand = {"git", "clone", request.getRequest()};
+            String[] gitCloneCommand = {"git", "clone", repositoryUrl};
 
-            var gitCloneCommandBuilder = new ProcessBuilder(gitCloneCommand);
-            gitCloneCommandBuilder = gitCloneCommandBuilder.directory(tmpFolder.toFile());
-
-            var gitCloneProcess = gitCloneCommandBuilder.start();
-
-            if (gitCloneProcess.waitFor() != 0)
-                throw new TechnicalException("Cli commit retriever - could not clone repository");
-
-            gitCloneProcess.destroy();
+            cli.excuteCommand(gitCloneCommand, tmpFolder);
 
         } catch (IOException | InterruptedException e) {
 
             throw new TechnicalException(EXCEPTION_MESSAGE, e);
 
         }
-
-    }
-
-    private boolean removeFolder(File folder) {
-
-        File[] allContent = folder.listFiles();
-
-        if (allContent != null)
-            Arrays.stream(allContent).forEach(this::removeFolder);
-
-        return folder.delete();
 
     }
 

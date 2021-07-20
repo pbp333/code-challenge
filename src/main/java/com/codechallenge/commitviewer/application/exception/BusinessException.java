@@ -8,10 +8,6 @@ public class BusinessException extends RuntimeException {
     private BusinessException() {
     }
 
-    public BusinessException(String message, Throwable trowable) {
-        super(message, trowable);
-    }
-
     public BusinessException(String message) {
         super(message);
     }
