@@ -1,4 +1,4 @@
-package com.codechallenge.commitviewer.domain;
+package com.codechallenge.commitviewer.application.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.Test;
 
+import com.codechallenge.commitviewer.application.core.Commit;
 import com.codechallenge.commitviewer.application.exception.BusinessException;
 
 public class CommitTest {

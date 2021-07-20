@@ -1,4 +1,4 @@
-package com.codechallenge.commitviewer.domain;
+package com.codechallenge.commitviewer.application.core;
 
 import java.time.LocalDateTime;
 
