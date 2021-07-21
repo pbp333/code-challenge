@@ -1,21 +1,52 @@
 package com.codechallenge.commitviewer.application.core;
 
-import java.time.LocalDateTime;
+
+import java.time.Instant;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.codechallenge.commitviewer.application.exception.BusinessException;
 
+@Entity
+@Table(name = "COMMIT")
 public class Commit {
 
-    private final String sha;
-    private final String message;
-    private final LocalDateTime date;
-    private final String authorName;
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "SHA")
+    private String sha;
+
+    @Column(name = "MESSAGE")
+    private String message;
+
+    @Column(name = "DATE", columnDefinition = "TIMESTAMP(6)")
+    private Instant date;
+
+    @Column(name = "AUTHORNAME")
+    private String authorName;
+
+    // Needed for JPA
+    private Commit() {
+
+    }
 
     private Commit(Builder builder) {
         this.sha = builder.sha;
         this.message = builder.message;
         this.date = builder.date;
         this.authorName = builder.authorName;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getSha() {
@@ -26,7 +57,7 @@ public class Commit {
         return message;
     }
 
-    public LocalDateTime getDate() {
+    public Instant getDate() {
         return date;
     }
 
@@ -41,8 +72,12 @@ public class Commit {
     public static class Builder {
         private String sha;
         private String message;
-        private LocalDateTime date;
+        private Instant date;
         private String authorName;
+
+        private Builder() {
+
+        }
 
         public Builder sha(String sha) {
             this.sha = sha;
@@ -54,7 +89,7 @@ public class Commit {
             return this;
         }
 
-        public Builder date(LocalDateTime date) {
+        public Builder date(Instant date) {
             this.date = date;
             return this;
         }

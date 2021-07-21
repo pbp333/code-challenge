@@ -2,12 +2,11 @@ package com.codechallenge.commitviewer.application.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.Test;
 
-import com.codechallenge.commitviewer.application.core.Commit;
 import com.codechallenge.commitviewer.application.exception.BusinessException;
 
 public class CommitTest {
@@ -16,13 +15,13 @@ public class CommitTest {
     public void canBuild() {
 
         // Given
-        String sha = RandomString.make(10);
-        String message = RandomString.make(10);
-        LocalDateTime date = LocalDateTime.now();
-        String authorName = RandomString.make(10);
+        var sha = RandomString.make(10);
+        var message = RandomString.make(10);
+        var date = Instant.now();
+        var authorName = RandomString.make(10);
 
         // When
-        Commit commit = Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+        var commit = Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
 
         // Then
         assertThat(commit).isNotNull();
@@ -39,9 +38,9 @@ public class CommitTest {
 
         // Given
         String sha = null;
-        String message = RandomString.make(10);
-        LocalDateTime date = LocalDateTime.now();
-        String authorName = RandomString.make(10);
+        var message = RandomString.make(10);
+        var date = Instant.now();
+        var authorName = RandomString.make(10);
 
         // When
         Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
@@ -52,10 +51,10 @@ public class CommitTest {
     public void exceptionWhenShaIsEmpty() {
 
         // Given
-        String sha = "";
-        String message = RandomString.make(10);
-        LocalDateTime date = LocalDateTime.now();
-        String authorName = RandomString.make(10);
+        var sha = "";
+        var message = RandomString.make(10);
+        var date = Instant.now();
+        var authorName = RandomString.make(10);
 
         // When
         Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
@@ -66,10 +65,10 @@ public class CommitTest {
     public void exceptionWhenShaIsBlank() {
 
         // Given
-        String sha = "     ";
-        String message = RandomString.make(10);
-        LocalDateTime date = LocalDateTime.now();
-        String authorName = RandomString.make(10);
+        var sha = "     ";
+        var message = RandomString.make(10);
+        var date = Instant.now();
+        var authorName = RandomString.make(10);
 
         // When
         Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
@@ -80,10 +79,10 @@ public class CommitTest {
     public void exceptionWhenMessageIsNull() {
 
         // Given
-        String sha = RandomString.make(10);
+        var sha = RandomString.make(10);
         String message = null;
-        LocalDateTime date = LocalDateTime.now();
-        String authorName = RandomString.make(10);
+        var date = Instant.now();
+        var authorName = RandomString.make(10);
 
         // When
         Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
@@ -94,10 +93,10 @@ public class CommitTest {
     public void exceptionWhenMessageIsEmpty() {
 
         // Given
-        String sha = RandomString.make(10);
-        String message = "";
-        LocalDateTime date = LocalDateTime.now();
-        String authorName = RandomString.make(10);
+        var sha = RandomString.make(10);
+        var message = "";
+        var date = Instant.now();
+        var authorName = RandomString.make(10);
 
         // When
         Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
@@ -108,10 +107,10 @@ public class CommitTest {
     public void exceptionWhenMessageIsBlank() {
 
         // Given
-        String sha = RandomString.make(10);
-        String message = "      ";
-        LocalDateTime date = LocalDateTime.now();
-        String authorName = RandomString.make(10);
+        var sha = RandomString.make(10);
+        var message = "      ";
+        var date = Instant.now();
+        var authorName = RandomString.make(10);
 
         // When
         Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
@@ -123,10 +122,10 @@ public class CommitTest {
     public void exceptionWhenDateIsNull() {
 
         // Given
-        String sha = RandomString.make(10);
-        String message = RandomString.make(10);
-        LocalDateTime date = null;
-        String authorName = RandomString.make(10);
+        var sha = RandomString.make(10);
+        var message = RandomString.make(10);
+        Instant date = null;
+        var authorName = RandomString.make(10);
 
         // When
         Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
@@ -137,9 +136,9 @@ public class CommitTest {
     public void exceptionWhenAuthorNameIsNull() {
 
         // Given
-        String sha = RandomString.make(10);
-        String message = RandomString.make(10);
-        LocalDateTime date = LocalDateTime.now();
+        var sha = RandomString.make(10);
+        var message = RandomString.make(10);
+        var date = Instant.now();
         String authorName = null;
 
         // When
@@ -151,10 +150,10 @@ public class CommitTest {
     public void exceptionWhenAuthorNameIsEmpty() {
 
         // Given
-        String sha = RandomString.make(10);
-        String message = RandomString.make(10);
-        LocalDateTime date = LocalDateTime.now();
-        String authorName = "";
+        var sha = RandomString.make(10);
+        var message = RandomString.make(10);
+        var date = Instant.now();
+        var authorName = "";
 
         // When
         Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
@@ -165,10 +164,10 @@ public class CommitTest {
     public void exceptionWhenAuthorNameIsBlank() {
 
         // Given
-        String sha = RandomString.make(10);
-        String message = RandomString.make(10);
-        LocalDateTime date = LocalDateTime.now();
-        String authorName = "     ";
+        var sha = RandomString.make(10);
+        var message = RandomString.make(10);
+        var date = Instant.now();
+        var authorName = "     ";
 
         // When
         Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();

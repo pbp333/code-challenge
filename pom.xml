@@ -21,10 +21,10 @@
 	<properties>
 		<java.version>11</java.version>
 		<junit.version>4.12</junit.version>
-		<h2.version>1.4.200</h2.version>
 		<jacoco.version>0.8.4</jacoco.version>
 		<javacrumbs.json-unit.version>1.19.0</javacrumbs.json-unit.version>
 		<jackson.version>2.12.4</jackson.version>
+		<mysql.version>8.0.25</mysql.version>
 	</properties>
 	
 	<dependencies>
@@ -56,9 +56,9 @@
 		
 		<!-- Other -->
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>${h2.version}</version><!--$NO-MVN-MAN-VER$-->
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
