@@ -2,7 +2,7 @@ package com.codechallenge.commitviewer.infrastructure.rest.json;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.Test;
@@ -15,7 +15,7 @@ public class AuthorTest {
         // Given
         String name = RandomString.make(10);
         String email = RandomString.make(10);
-        LocalDateTime date = LocalDateTime.now();
+        Instant date = Instant.now();
 
         // When
         Author author = new Author();

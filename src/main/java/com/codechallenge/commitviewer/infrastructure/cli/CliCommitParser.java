@@ -1,8 +1,6 @@
 package com.codechallenge.commitviewer.infrastructure.cli;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.TimeZone;
 
 import com.codechallenge.commitviewer.application.api.dto.CommitDto;
 
@@ -35,10 +33,9 @@ public class CliCommitParser {
 
     }
 
-    private static LocalDateTime parseCommitDate(String commitDate) {
+    private static Instant parseCommitDate(String commitDate) {
 
-        return LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.valueOf(commitDate)),
-                TimeZone.getDefault().toZoneId());
+        return Instant.ofEpochSecond(Long.valueOf(commitDate));
     }
 
 }

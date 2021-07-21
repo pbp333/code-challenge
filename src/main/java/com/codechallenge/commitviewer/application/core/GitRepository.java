@@ -1,8 +1,9 @@
 package com.codechallenge.commitviewer.application.core;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -34,7 +35,7 @@ public class GitRepository {
 
     @JoinColumn(name = "GIT_REPOSITORY_ID")
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Commit> commits = new ArrayList<>();
+    private Set<Commit> commits = new HashSet<>();
 
     // Needed for JPA
     private GitRepository() {
@@ -45,6 +46,10 @@ public class GitRepository {
         this.ownerName = builder.ownerName;
         this.name = builder.name;
         this.commits.addAll(builder.commits);
+    }
+
+    public void addCommits(List<Commit> commitsToAdd) {
+        this.commits.addAll(commitsToAdd);
     }
 
     public Long getId() {
@@ -59,8 +64,8 @@ public class GitRepository {
         return name;
     }
 
-    public List<Commit> getCommits() {
-        return Collections.unmodifiableList(commits);
+    public Set<Commit> getCommits() {
+        return Collections.unmodifiableSet(commits);
     }
 
     public static Builder builder() {
@@ -70,7 +75,7 @@ public class GitRepository {
     public static class Builder {
         private String ownerName;
         private String name;
-        private List<Commit> commits = new ArrayList<>();
+        private Set<Commit> commits;
 
         private Builder() {
 
@@ -86,7 +91,7 @@ public class GitRepository {
             return this;
         }
 
-        public Builder commits(List<Commit> commits) {
+        public Builder commits(Set<Commit> commits) {
             this.commits = commits;
             return this;
         }
@@ -97,7 +102,7 @@ public class GitRepository {
             validateName();
 
             if (this.commits == null)
-                this.commits = Collections.emptyList();
+                this.commits = Collections.emptySet();
 
             return new GitRepository(this);
         }

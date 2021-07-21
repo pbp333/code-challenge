@@ -7,8 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -19,10 +18,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.codechallenge.commitviewer.application.api.request.PaginatedRequest;
-import com.codechallenge.commitviewer.application.api.request.PaginatedRequestUtil;
 import com.codechallenge.commitviewer.application.exception.TechnicalException;
-import com.codechallenge.commitviewer.application.port.CommitRetriverStrategy;
+import com.codechallenge.commitviewer.application.port.PortUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CliCommitRetrieverAdapterTest {
@@ -43,37 +40,25 @@ public class CliCommitRetrieverAdapterTest {
     }
 
     @Test
-    public void canGetStrategy() {
-
-        // When
-        CommitRetriverStrategy strategy = adapter.getStrategy();
-
-        // Then
-        assertThat(strategy).isEqualTo(CommitRetriverStrategy.CLI);
-    }
-
-    @Test
     public void canGetCommits() throws IOException, InterruptedException {
 
         // Given
-        PaginatedRequest<String> request = PaginatedRequestUtil.getRandom();
+        var request = PortUtils.getRandomGitRepositoryCommitCliRequest();
 
         var expectedProjectFolder = "expectedProjectFolder";
 
-        String sha = RandomString.make(10);
-        String authorName = RandomString.make(10);
+        var sha = RandomString.make(10);
+        var authorName = RandomString.make(10);
 
-        LocalDateTime date = LocalDateTime.now().withNano(0);
+        var epochSeconds = Instant.now().getEpochSecond();
+        var dateAsString = String.valueOf(epochSeconds);
+        var expectedDate = Instant.ofEpochSecond(epochSeconds);
 
-        Long epochSeconds = date.atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
+        var message = RandomString.make(30);
 
-        String dateAsString = String.valueOf(epochSeconds);
+        var commit = String.format(EXPECTED_COMMIT_FORMATTER, sha, authorName, dateAsString, message);
 
-        String message = RandomString.make(30);
-
-        String commit = String.format(EXPECTED_COMMIT_FORMATTER, sha, authorName, dateAsString, message);
-
-        File mockFile = mock(File.class);
+        var mockFile = mock(File.class);
 
         when(fileManager.createTemporaryFolder(any(String.class))).thenReturn(mockFile);
 
@@ -92,7 +77,7 @@ public class CliCommitRetrieverAdapterTest {
 
         assertThat(response.get(0).getSha()).isEqualTo(sha);
         assertThat(response.get(0).getAuthorName()).isEqualTo(authorName);
-        assertThat(response.get(0).getDate()).isEqualTo(date);
+        assertThat(response.get(0).getDate()).isEqualTo(expectedDate);
         assertThat(response.get(0).getMessage()).isEqualTo(message);
 
     }
@@ -101,7 +86,7 @@ public class CliCommitRetrieverAdapterTest {
     public void exceptionCreatingTemporaryRepositoryFolder() throws IOException, InterruptedException {
 
         // Given
-        PaginatedRequest<String> request = PaginatedRequestUtil.getRandom();
+        var request = PortUtils.getRandomGitRepositoryCommitCliRequest();
 
         when(fileManager.createTemporaryFolder(any(String.class))).thenThrow(new IOException());
 
@@ -114,9 +99,9 @@ public class CliCommitRetrieverAdapterTest {
     public void exceptionCloningRepository() throws IOException, InterruptedException {
 
         // Given
-        PaginatedRequest<String> request = PaginatedRequestUtil.getRandom();
+        var request = PortUtils.getRandomGitRepositoryCommitCliRequest();
 
-        File mockFile = mock(File.class);
+        var mockFile = mock(File.class);
 
         when(fileManager.createTemporaryFolder(any(String.class))).thenReturn(mockFile);
 
@@ -131,9 +116,9 @@ public class CliCommitRetrieverAdapterTest {
     public void exceptionRetrievingRepositoryFolder() throws IOException, InterruptedException {
 
         // Given
-        PaginatedRequest<String> request = PaginatedRequestUtil.getRandom();
+        var request = PortUtils.getRandomGitRepositoryCommitCliRequest();
 
-        File mockFile = mock(File.class);
+        var mockFile = mock(File.class);
 
         when(fileManager.createTemporaryFolder(any(String.class))).thenReturn(mockFile);
 
@@ -149,7 +134,7 @@ public class CliCommitRetrieverAdapterTest {
     public void exceptionRetrievingRepositoryFolderMoreThanOneReturns() throws IOException, InterruptedException {
 
         // Given
-        PaginatedRequest<String> request = PaginatedRequestUtil.getRandom();
+        var request = PortUtils.getRandomGitRepositoryCommitCliRequest();
 
         var expectedProjectFolder1 = "expectedProjectFolder1";
         var expectedProjectFolder2 = "expectedProjectFolder2";
@@ -170,11 +155,11 @@ public class CliCommitRetrieverAdapterTest {
     public void exceptionRetrievingCommitList() throws IOException, InterruptedException {
 
         // Given
-        PaginatedRequest<String> request = PaginatedRequestUtil.getRandom();
+        var request = PortUtils.getRandomGitRepositoryCommitCliRequest();
 
         var expectedProjectFolder = "expectedProjectFolder";
 
-        File mockFile = mock(File.class);
+        var mockFile = mock(File.class);
 
         when(fileManager.createTemporaryFolder(any(String.class))).thenReturn(mockFile);
 
@@ -187,7 +172,5 @@ public class CliCommitRetrieverAdapterTest {
         adapter.getCommits(request);
 
     }
-
-
 
 }

@@ -2,7 +2,7 @@ package com.codechallenge.commitviewer.application.api.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.Test;
@@ -15,7 +15,7 @@ public class CommitDtoTest {
         // Given
         String sha = RandomString.make(10);
         String message = RandomString.make(10);
-        LocalDateTime date = LocalDateTime.now();
+        Instant date = Instant.now();
         String authorName = RandomString.make(10);
 
         // When

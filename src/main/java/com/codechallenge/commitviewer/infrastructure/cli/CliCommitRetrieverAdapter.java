@@ -8,13 +8,12 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.codechallenge.commitviewer.application.api.dto.CommitDto;
-import com.codechallenge.commitviewer.application.api.request.PaginatedRequest;
 import com.codechallenge.commitviewer.application.exception.TechnicalException;
-import com.codechallenge.commitviewer.application.port.CommitRetrieverPort;
-import com.codechallenge.commitviewer.application.port.CommitRetriverStrategy;
+import com.codechallenge.commitviewer.application.port.cli.CommitRetrieverCliPort;
+import com.codechallenge.commitviewer.application.port.cli.GitRepositoryCommitCliRequest;
 
 @Service
-public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
+public class CliCommitRetrieverAdapter implements CommitRetrieverCliPort {
 
     private static final String TMP_FOLDER_PREFIX = "tmp";
     private static final String EXCEPTION_MESSAGE = "Unable to retrieve commit list via CLI";
@@ -28,22 +27,18 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverPort {
     }
 
     @Override
-    public CommitRetriverStrategy getStrategy() {
-        return CommitRetriverStrategy.CLI;
-    }
-
-    @Override
-    public List<CommitDto> getCommits(PaginatedRequest<String> request) {
+    public List<CommitDto> getCommits(GitRepositoryCommitCliRequest request) {
 
         var tmpFolder = createRepositoryFolder();
 
-        createGitRepository(request.getRequest(), tmpFolder);
+        createGitRepository(request.getUrl(), tmpFolder);
 
         var repoFolderName = getRepoFolderName(tmpFolder);
 
         var repoFolder = new File(tmpFolder.getAbsolutePath().concat("/").concat(repoFolderName));
 
-        var commitList = getCommitList(repoFolder, request.getPage(), request.getSize());
+        var commitList =
+                getCommitList(repoFolder, request.getPageRequest().getPage(), request.getPageRequest().getSize());
 
         fileManager.removeTemporaryFolderAndContents(tmpFolder);
 

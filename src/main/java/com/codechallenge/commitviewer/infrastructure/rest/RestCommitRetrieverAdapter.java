@@ -14,14 +14,13 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import com.codechallenge.commitviewer.application.api.dto.CommitDto;
-import com.codechallenge.commitviewer.application.api.request.PaginatedRequest;
 import com.codechallenge.commitviewer.application.exception.TechnicalException;
-import com.codechallenge.commitviewer.application.port.CommitRetrieverPort;
-import com.codechallenge.commitviewer.application.port.CommitRetriverStrategy;
+import com.codechallenge.commitviewer.application.port.rest.CommitRetrieverRestPort;
+import com.codechallenge.commitviewer.application.port.rest.GitRepositoryCommitRestRequest;
 import com.codechallenge.commitviewer.infrastructure.rest.json.GitHubCommitResponse;
 
 @Service
-public class RestCommitRetrieverAdapter implements CommitRetrieverPort {
+public class RestCommitRetrieverAdapter implements CommitRetrieverRestPort {
 
     private final RestTemplate restTemplate;
 
@@ -31,17 +30,13 @@ public class RestCommitRetrieverAdapter implements CommitRetrieverPort {
     }
 
     @Override
-    public CommitRetriverStrategy getStrategy() {
-        return CommitRetriverStrategy.REST;
-    }
-
-    @Override
-    public List<CommitDto> getCommits(PaginatedRequest<String> request) {
+    public List<CommitDto> getCommits(GitRepositoryCommitRestRequest request) {
 
         try {
 
-            String commitsApiUrl = GitHubApiUtil.buildCommitsApiUrlFromRepositoryUrlWithPagination(request.getRequest(),
-                    request.getPage(), request.getSize());
+            String commitsApiUrl = GitHubApiUrlUtils.buildCommitsApiUrlFromRepositoryUrlWithPagination(
+                    request.getRepositoryName(), request.getOwnerName(), request.getPageRequest().getPage(),
+                    request.getPageRequest().getSize());
 
             ResponseEntity<GitHubCommitResponse[]> response = restTemplate.exchange(commitsApiUrl, HttpMethod.GET,
                     new HttpEntity<>(new HttpHeaders()), GitHubCommitResponse[].class);

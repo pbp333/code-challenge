@@ -1,12 +1,12 @@
 package com.codechallenge.commitviewer.infrastructure.rest.json;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class Committer {
 
     private String name;
     private String email;
-    private LocalDateTime date;
+    private Instant date;
 
     public String getName() {
         return name;
@@ -24,11 +24,11 @@ public class Committer {
         this.email = email;
     }
 
-    public LocalDateTime getDate() {
+    public Instant getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 

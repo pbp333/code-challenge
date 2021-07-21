@@ -131,4 +131,29 @@ public class Commit {
         }
     }
 
+    @Override
+    public int hashCode() {
+        final var prime = 31;
+        var result = 1;
+        result = prime * result + ((sha == null) ? 0 : sha.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Commit other = (Commit) obj;
+        if (sha == null) {
+            if (other.sha != null)
+                return false;
+        } else if (!sha.equals(other.sha))
+            return false;
+        return true;
+    }
+
 }

@@ -2,8 +2,7 @@ package com.codechallenge.commitviewer.infrastructure.cli;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.Instant;
 
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.Test;
@@ -16,18 +15,16 @@ public class CliCommitParserTest {
     public void canParse() {
 
         // Given
-        String sha = RandomString.make(10);
-        String authorName = RandomString.make(10);
+        var sha = RandomString.make(10);
+        var authorName = RandomString.make(10);
 
-        LocalDateTime date = LocalDateTime.now().withNano(0);
+        var epochSeconds = Instant.now().getEpochSecond();
+        var dateAsString = String.valueOf(epochSeconds);
+        var expectedDate = Instant.ofEpochSecond(epochSeconds);
 
-        Long epochSeconds = date.atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
+        var message = RandomString.make(30);
 
-        String dateAsString = String.valueOf(epochSeconds);
-
-        String message = RandomString.make(30);
-
-        String commit = String.format(EXPECTED_COMMIT_FORMATTER, sha, authorName, dateAsString, message);
+        var commit = String.format(EXPECTED_COMMIT_FORMATTER, sha, authorName, dateAsString, message);
 
         // When
         var commitDto = CliCommitParser.parse(commit);
@@ -37,7 +34,7 @@ public class CliCommitParserTest {
 
         assertThat(commitDto.getSha()).isEqualTo(sha);
         assertThat(commitDto.getAuthorName()).isEqualTo(authorName);
-        assertThat(commitDto.getDate()).isEqualTo(date);
+        assertThat(commitDto.getDate()).isEqualTo(expectedDate);
         assertThat(commitDto.getMessage()).isEqualTo(message);
 
     }

@@ -1,6 +1,6 @@
 package com.codechallenge.commitviewer.infrastructure.rest.json;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Random;
 
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
@@ -11,7 +11,7 @@ public class JsonUtil {
 
         String name = RandomString.make(10);
         String email = RandomString.make(10);
-        LocalDateTime date = LocalDateTime.now();
+        Instant date = Instant.now();
 
         Author author = new Author();
 
@@ -26,7 +26,7 @@ public class JsonUtil {
 
         String name = RandomString.make(10);
         String email = RandomString.make(10);
-        LocalDateTime date = LocalDateTime.now();
+        Instant date = Instant.now();
 
         Committer commiter = new Committer();
 

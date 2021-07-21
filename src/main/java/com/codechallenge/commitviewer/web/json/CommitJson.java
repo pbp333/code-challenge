@@ -1,12 +1,12 @@
 package com.codechallenge.commitviewer.web.json;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class CommitJson {
 
     private final String sha;
     private final String message;
-    private final LocalDateTime date;
+    private final Instant date;
     private final String authorName;
 
     private CommitJson(Builder builder) {
@@ -24,7 +24,7 @@ public class CommitJson {
         return message;
     }
 
-    public LocalDateTime getDate() {
+    public Instant getDate() {
         return date;
     }
 
@@ -39,7 +39,7 @@ public class CommitJson {
     public static class Builder {
         private String sha;
         private String message;
-        private LocalDateTime date;
+        private Instant date;
         private String authorName;
 
         public Builder sha(String sha) {
@@ -52,7 +52,7 @@ public class CommitJson {
             return this;
         }
 
-        public Builder date(LocalDateTime date) {
+        public Builder date(Instant date) {
             this.date = date;
             return this;
         }

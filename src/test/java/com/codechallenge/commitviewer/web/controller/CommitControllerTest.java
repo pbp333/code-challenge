@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -18,9 +17,8 @@ import org.mockito.Mock;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.codechallenge.commitviewer.application.api.ApiUtils;
 import com.codechallenge.commitviewer.application.api.CommitApplicationService;
-import com.codechallenge.commitviewer.application.api.dto.CommitDto;
-import com.codechallenge.commitviewer.application.api.dto.CommitDtoUtil;
 import com.codechallenge.commitviewer.application.api.request.PaginatedRequest;
 
 public class CommitControllerTest extends AbstractControllerTest<CommitController> {
@@ -38,16 +36,16 @@ public class CommitControllerTest extends AbstractControllerTest<CommitControlle
         return controller;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({"unchecked"})
     @Test
     public void canGetCommitsWithPagination() throws Exception {
 
         // Given
-        String repositoryUrl = "repositoryUrl";
+        var repositoryUrl = "repositoryUrl";
         int page = 1;
         int size = 10;
 
-        CommitDto commit = CommitDtoUtil.getStatic();
+        var commit = ApiUtils.getStaticCommitDto();
 
         // @formatter:off
         String expectedJson = 
@@ -55,15 +53,15 @@ public class CommitControllerTest extends AbstractControllerTest<CommitControlle
                 + " {"
                 + "     \"sha\":\"sha-123456\","
                 + "     \"message\":\"message 123\","
-                + "     \"date\":\"2021-07-15T15:14:13.37318\","
+                + "     \"date\":\"2021-07-15T15:14:13.373180Z\","
                 + "     \"authorName\":\"Author Name\""
                 + " }"
                 + "]";
         // @formatter:on
 
-        ArgumentCaptor<PaginatedRequest> captor = ArgumentCaptor.forClass(PaginatedRequest.class);
+        var captor = ArgumentCaptor.forClass(PaginatedRequest.class);
 
-        List<CommitDto> commits = Arrays.asList(commit);
+        var commits = Arrays.asList(commit);
 
         when(service.getCommits(any(PaginatedRequest.class))).thenReturn(commits);
 
@@ -88,16 +86,16 @@ public class CommitControllerTest extends AbstractControllerTest<CommitControlle
 
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked"})
     @Test
     public void canGetCommitsWithoutPagination() throws Exception {
 
         // Given
-        String repositoryUrl = "repositoryUrl";
+        var repositoryUrl = "repositoryUrl";
         int defaultPage = 1;
         int defaultSize = 5;
 
-        CommitDto commit = CommitDtoUtil.getStatic();
+        var commit = ApiUtils.getStaticCommitDto();
 
         // @formatter:off
         String expectedJson = 
@@ -105,15 +103,15 @@ public class CommitControllerTest extends AbstractControllerTest<CommitControlle
                 + " {"
                 + "     \"sha\":\"sha-123456\","
                 + "     \"message\":\"message 123\","
-                + "     \"date\":\"2021-07-15T15:14:13.37318\","
+                + "     \"date\":\"2021-07-15T15:14:13.373180Z\","
                 + "     \"authorName\":\"Author Name\""
                 + " }"
                 + "]";
         // @formatter:on
 
-        ArgumentCaptor<PaginatedRequest> captor = ArgumentCaptor.forClass(PaginatedRequest.class);
+        var captor = ArgumentCaptor.forClass(PaginatedRequest.class);
 
-        List<CommitDto> commits = Arrays.asList(commit);
+        var commits = Arrays.asList(commit);
 
         when(service.getCommits(any(PaginatedRequest.class))).thenReturn(commits);
 
