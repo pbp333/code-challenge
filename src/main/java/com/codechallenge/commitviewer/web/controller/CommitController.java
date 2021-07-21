@@ -19,7 +19,7 @@ import com.codechallenge.commitviewer.web.json.JsonMapper;
 import com.codechallenge.commitviewer.web.request.PagingParam;
 
 @RestController
-@RequestMapping("/commits")
+@RequestMapping("/api/commits")
 public class CommitController {
 
     private final CommitApplicationService service;

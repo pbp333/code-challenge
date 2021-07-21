@@ -23,7 +23,7 @@ import com.codechallenge.commitviewer.application.api.request.PaginatedRequest;
 
 public class CommitControllerTest extends AbstractControllerTest<CommitController> {
 
-    private static final String COMMITS_ENDPOINT = "/commits";
+    private static final String COMMITS_ENDPOINT = "/api/commits";
 
     @Mock
     private CommitApplicationService service;
