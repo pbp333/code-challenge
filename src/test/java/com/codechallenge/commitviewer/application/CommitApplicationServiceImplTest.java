@@ -133,8 +133,8 @@ public class CommitApplicationServiceImplTest {
     private PaginatedRequest<String> getValidUrlRequest() {
 
         String repositoryUrl = VALID_REPOSITORY_URL;
-        int page = new Random().nextInt(100);
-        int size = new Random().nextInt(100);
+        int page = new Random().nextInt(100) + 1;
+        int size = new Random().nextInt(100) + 1;
 
         return PaginatedRequest.<String>builder().request(repositoryUrl).page(page).size(size).build();
     }

@@ -1,6 +1,7 @@
 package com.codechallenge.commitviewer.application;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -51,6 +52,8 @@ public class CommitApplicationServiceImpl implements CommitApplicationService {
         if (!commits.isEmpty())
             return commits.stream().map(CommitMapper::map).collect(Collectors.toList());
 
+        LOGGER.warning("Failed retrieving commits from DB.Retrying with Rest Adapter");
+
         var gitRepository = repository.findByOwnerNameAndName(ownerName, repositoryName)
                 .orElseGet(() -> GitRepository.builder().name(repositoryName).ownerName(ownerName).build());
 
@@ -69,7 +72,8 @@ public class CommitApplicationServiceImpl implements CommitApplicationService {
 
         } catch (TechnicalException e) {
 
-            LOGGER.warning("Failed retrieving commits with Rest Adapter.\nRetrying with Cli Adapter");
+            LOGGER.log(Level.ALL, e.getMessage(), e);
+            LOGGER.warning("Failed retrieving commits with Rest Adapter.Retrying with Cli Adapter");
 
             var cliRequest = GitRepositoryCommitCliRequest.from(request.getRequest(),
                     PageRequest.from(request.getPage(), request.getSize()));

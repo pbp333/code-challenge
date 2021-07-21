@@ -61,10 +61,10 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverCliPort {
 
         try {
 
-            var numberOfCommitsToSkip = size * page;
+            var numberOfCommitsToSkip = size * (page - 1);
 
-            var sizeArgument = String.format("--max-count=%n", size);
-            var numberOfCommitsToSkipArgument = String.format("--skip=%n", numberOfCommitsToSkip);
+            var sizeArgument = String.format("--max-count=%d", size);
+            var numberOfCommitsToSkipArgument = String.format("--skip=%d", numberOfCommitsToSkip);
 
             String[] gitLogCommands =
                     {"git", "log", "--pretty=%H-%cn-%ct-%s", sizeArgument, numberOfCommitsToSkipArgument};

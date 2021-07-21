@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommandLineInterfaceImpl implements CommandLineInterface {
 
-    private static final int COMMAND_PERMITED_TIMEOUT_IN_SECONDS = 10;
+    private static final int COMMAND_PERMITED_TIMEOUT_IN_SECONDS = 60;
 
     @Override
     public List<String> excuteCommand(String[] commands, File folder) throws IOException, InterruptedException {
