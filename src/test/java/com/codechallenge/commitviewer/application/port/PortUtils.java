@@ -4,7 +4,6 @@ import java.util.Random;
 
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 
-import com.codechallenge.commitviewer.application.port.PageRequest;
 import com.codechallenge.commitviewer.application.port.cli.GitRepositoryCommitCliRequest;
 import com.codechallenge.commitviewer.application.port.rest.GitRepositoryCommitRestRequest;
 

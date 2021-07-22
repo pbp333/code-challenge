@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,7 +33,7 @@ public class GitRepositoryRepositoryImplIntegrationTest {
         // Given
         var gitRepositoryBuilder = CoreUtils.getRandomGitRepositoryBuilder();
 
-        var commit = CoreUtils.getRandomCommit();
+        var commit = CoreUtils.getRandomCommitBuilder().date(Instant.now().truncatedTo(ChronoUnit.MICROS)).build();
 
         gitRepositoryBuilder.commits(Collections.singleton(commit));
 
@@ -72,7 +73,7 @@ public class GitRepositoryRepositoryImplIntegrationTest {
         // Given
         var gitRepositoryBuilder = CoreUtils.getRandomGitRepositoryBuilder();
 
-        var commit = CoreUtils.getRandomCommit();
+        var commit = CoreUtils.getRandomCommitBuilder().date(Instant.now().truncatedTo(ChronoUnit.MICROS)).build();
 
         gitRepositoryBuilder.commits(Collections.singleton(commit));
 
@@ -107,8 +108,9 @@ public class GitRepositoryRepositoryImplIntegrationTest {
         var gitRepositoryBuilder = CoreUtils.getRandomGitRepositoryBuilder();
 
         var commit1 = CoreUtils.getRandomCommitBuilder()
-                .date(LocalDateTime.now().minusDays(1).toInstant(ZoneOffset.UTC)).build();
-        var commit2 = CoreUtils.getRandomCommitBuilder().date(Instant.now()).build();
+                .date(LocalDateTime.now().minusDays(1).toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS))
+                .build();
+        var commit2 = CoreUtils.getRandomCommitBuilder().date(Instant.now().truncatedTo(ChronoUnit.MICROS)).build();
 
         gitRepositoryBuilder.commits(Stream.of(commit1, commit2).collect(Collectors.toSet()));
 

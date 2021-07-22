@@ -5,12 +5,15 @@ Simple Git public repositories commit viewer.
 ## Installation
 
 ### Prerequisites 
+-   JDK11 (https://docs.oracle.com/en/java/javase/11/install/installation-jdk-linux-platforms.html#GUID-737A84E4-2EFF-4D38-8E60-3E29D1B884B8) - LINUX
+-   JDK11 (https://docs.oracle.com/en/java/javase/11/install/installation-jdk-microsoft-windows-platforms.html#GUID-A7E27B90-A28D-4237-9383-A58B416071CA) - WINDOWS
 -   Git (https://www.linode.com/docs/guides/how-to-install-git-on-linux-mac-and-windows/)
 -   Maven (https://maven.apache.org/install.html)
 
 ### Database setup (MySQL)
 
--   Install Database - https://www.mysql.com/downloads/
+-   Install Database - https://dev.mysql.com/doc/mysql-installation-excerpt/8.0/en/windows-install-archive.html - WINDOWS
+-   Install Database - https://docs.rackspace.com/support/how-to/install-mysql-server-on-the-ubuntu-operating-system/ - LINUX
 -   Create Schema - CREATE SCHEMA {schema_name};
 -   Create user - CREATE USER '{username}@'localhost' IDENTIFIED BY '{password}';
 -   Grant privileges - GRANT ALL PRIVILEGES ON {schema_name} TO '{username}@'localhost';
