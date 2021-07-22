@@ -20,6 +20,9 @@ import org.springframework.util.MultiValueMap;
 import com.codechallenge.commitviewer.application.api.ApiUtils;
 import com.codechallenge.commitviewer.application.api.CommitApplicationService;
 import com.codechallenge.commitviewer.application.api.request.PaginatedRequest;
+import com.codechallenge.commitviewer.application.exception.ApplicationException;
+import com.codechallenge.commitviewer.application.exception.BusinessException;
+import com.codechallenge.commitviewer.application.exception.TechnicalException;
 
 public class CommitControllerTest extends AbstractControllerTest<CommitController> {
 
@@ -134,4 +137,107 @@ public class CommitControllerTest extends AbstractControllerTest<CommitControlle
 
     }
 
+    @SuppressWarnings({"unchecked"})
+    @Test
+    public void canHandleBusinessException() throws Exception {
+
+        // Given
+        var repositoryUrl = "repositoryUrl";
+
+        // @formatter:off
+        String expectedJson = 
+                "{"
+                + " \"message\":\"random message\""
+                + "}";
+        // @formatter:on
+
+        when(service.getCommits(any(PaginatedRequest.class))).thenThrow(new BusinessException("random message"));
+
+        MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+
+        requestParams.add("url", repositoryUrl);
+
+        // When
+        getMockMvc().perform(get(COMMITS_ENDPOINT).params(requestParams)).andExpect(status().isUnprocessableEntity())
+                .andExpect(json().isPresent()).andExpect(json().isEqualTo(expectedJson));
+
+    }
+
+    @SuppressWarnings({"unchecked"})
+    @Test
+    public void canHandleTechnicalException() throws Exception {
+
+        // Given
+        var repositoryUrl = "repositoryUrl";
+
+        // @formatter:off
+        String expectedJson = 
+                "{"
+                + " \"message\":\"random message\""
+                + "}";
+        // @formatter:on
+
+        when(service.getCommits(any(PaginatedRequest.class))).thenThrow(new TechnicalException("random message"));
+
+        MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+
+        requestParams.add("url", repositoryUrl);
+
+        // When
+        getMockMvc().perform(get(COMMITS_ENDPOINT).params(requestParams)).andExpect(status().isInternalServerError())
+                .andExpect(json().isPresent()).andExpect(json().isEqualTo(expectedJson));
+
+    }
+
+    @SuppressWarnings({"unchecked"})
+    @Test
+    public void canHandleApplicationException() throws Exception {
+
+        // Given
+        var repositoryUrl = "repositoryUrl";
+
+        // @formatter:off
+        String expectedJson = 
+                "{"
+                + " \"message\":\"random message\""
+                + "}";
+        // @formatter:on
+
+        when(service.getCommits(any(PaginatedRequest.class))).thenThrow(new ApplicationException("random message"));
+
+        MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+
+        requestParams.add("url", repositoryUrl);
+
+        // When
+        getMockMvc().perform(get(COMMITS_ENDPOINT).params(requestParams)).andExpect(status().isUnprocessableEntity())
+                .andExpect(json().isPresent()).andExpect(json().isEqualTo(expectedJson));
+
+    }
+
+    @SuppressWarnings({"unchecked"})
+    @Test
+    public void canHandleGenericException() throws Exception {
+
+        // Given
+        var repositoryUrl = "repositoryUrl";
+
+        // @formatter:off
+        String expectedJson = 
+                "{"
+                + " \"message\":\"An unexpected error has ocurred.\""
+                + "}";
+        // @formatter:on
+
+        when(service.getCommits(any(PaginatedRequest.class))).thenThrow(new RuntimeException("random message"));
+
+        MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+
+        requestParams.add("url", repositoryUrl);
+
+        // When
+        getMockMvc().perform(get(COMMITS_ENDPOINT).params(requestParams)).andExpect(status().isInternalServerError())
+                .andExpect(json().isPresent()).andExpect(json().isEqualTo(expectedJson));
+
+    }
 }

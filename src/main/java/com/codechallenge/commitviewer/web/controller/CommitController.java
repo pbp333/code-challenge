@@ -20,7 +20,7 @@ import com.codechallenge.commitviewer.web.request.PagingParam;
 
 @RestController
 @RequestMapping("/api/commits")
-public class CommitController {
+public class CommitController extends ErrorController {
 
     private final CommitApplicationService service;
 
