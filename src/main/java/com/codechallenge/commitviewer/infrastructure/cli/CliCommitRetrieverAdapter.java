@@ -72,8 +72,16 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverCliPort {
             return cli.excuteCommand(gitLogCommands, repoFolder);
 
 
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
+
             throw new TechnicalException(EXCEPTION_MESSAGE, e);
+
+        } catch (InterruptedException e) {
+
+            Thread.currentThread().interrupt();
+
+            throw new TechnicalException(EXCEPTION_MESSAGE, e);
+
         }
     }
 
@@ -90,7 +98,13 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverCliPort {
 
             return cliResponse.get(0);
 
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
+
+            throw new TechnicalException(EXCEPTION_MESSAGE, e);
+
+        } catch (InterruptedException e) {
+
+            Thread.currentThread().interrupt();
 
             throw new TechnicalException(EXCEPTION_MESSAGE, e);
 
@@ -105,7 +119,13 @@ public class CliCommitRetrieverAdapter implements CommitRetrieverCliPort {
 
             cli.excuteCommand(gitCloneCommand, tmpFolder);
 
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
+
+            throw new TechnicalException(EXCEPTION_MESSAGE, e);
+
+        } catch (InterruptedException e) {
+
+            Thread.currentThread().interrupt();
 
             throw new TechnicalException(EXCEPTION_MESSAGE, e);
 

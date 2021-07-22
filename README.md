@@ -5,37 +5,37 @@ Simple Git public repositories commit viewer.
 ## Installation
 
 ### Prerequisites 
-- Git (https://www.linode.com/docs/guides/how-to-install-git-on-linux-mac-and-windows/)
-- Maven (https://maven.apache.org/install.html)
+-   Git (https://www.linode.com/docs/guides/how-to-install-git-on-linux-mac-and-windows/)
+-   Maven (https://maven.apache.org/install.html)
 
 ### Database setup (MySQL)
 
-- Install Database - https://www.mysql.com/downloads/
-- Create Schema - CREATE SCHEMA {schema_name};
-- Create user - CREATE USER '{username}@'localhost' IDENTIFIED BY '{password}';
-- Grant privileges - GRANT ALL PRIVILEGES ON {schema_name} TO '{username}@'localhost';
+-   Install Database - https://www.mysql.com/downloads/
+-   Create Schema - CREATE SCHEMA {schema_name};
+-   Create user - CREATE USER '{username}@'localhost' IDENTIFIED BY '{password}';
+-   Grant privileges - GRANT ALL PRIVILEGES ON {schema_name} TO '{username}@'localhost';
 
 Two schemas should be setup, one for application usage, the other for integration tests.
 
 ### Application Server setup (Apache Tomcat)
 
-- Download Apache Tomcat - https://tomcat.apache.org/download-80.cgi
+-   Download Apache Tomcat - https://tomcat.apache.org/download-80.cgi
 
 #### Linux
-- Extract files;
-- chmod +x startup.sh (allows the execution of the startup.sh script)
-- chmod +x catalina.sh (allows the execution of the startup.sh script)
-- chmod +x shutdown.sh (allows the execution of the startup.sh script)
-- start server - ./startup.sh
-- stop server - ./shutdown.sh
+-   Extract files;
+-   chmod +x startup.sh (allows the execution of the startup.sh script)
+-   chmod +x catalina.sh (allows the execution of the startup.sh script)
+-   chmod +x shutdown.sh (allows the execution of the startup.sh script)
+-   start server - ./startup.sh
+-   stop server - ./shutdown.sh
 
 #### Windows
-- Extract files;
-- chmod +x startup.sh (UNIX only - allows for the exceution of the startup.sh script)
-- chmod +x catalina.sh (UNIX only - allows for the exceution of the startup.sh script)
-- chmod +x shutdown.sh (UNIX only - allows for the exceution of the startup.sh script)
-- start server - ./startup.sh
-- stop server - ./shutdown.sh
+-   Extract files;
+-   chmod +x startup.sh (UNIX only - allows for the exceution of the startup.sh script)
+-   chmod +x catalina.sh (UNIX only - allows for the exceution of the startup.sh script)
+-   chmod +x shutdown.sh (UNIX only - allows for the exceution of the startup.sh script)
+-   start server - ./startup.sh
+-   stop server - ./shutdown.sh
  
 #### Configuration File
 
@@ -69,10 +69,10 @@ It is advised to use a different schema for the integration tests, all data will
 Test data stored in Integration tests will be purged after each test.
 
 ### Build
-- Run - mvn clean install (on project home folder)
+-   Run - mvn clean install (on project home folder)
 
 ### Test Coverage
-- Open /{project_folder}/target/site/jacoco/index.html
+-   Open /{project_folder}/target/site/jacoco/index.html
 
 ## Usage
 
@@ -85,10 +85,10 @@ Pagination has a default value of page = 1, size = 5, if no values are provided.
 (note: spring boot (Eclipse/IntelliJ) url should be 'http://localhost:8080')
 
 #### Flow
-- User request, through the Web api;
-- Returns commit representation from the the Database for given Git repository Url, if present;
-- No Git Repository is present in Database, Rest GitHub api is called, commits retrieved are stored in DB, and a representation is returned;
-- No Git Repository is present in Database, Rest GitHub api is not able to respond for any reason, commits are retrieved from the Command Line Interface and stored in the DB, a representation is returned.
+-   User request, through the Web api;
+-   Returns commit representation from the the Database for given Git repository Url, if present;
+-   No Git Repository is present in Database, Rest GitHub api is called, commits retrieved are stored in DB, and a representation is returned;
+-   No Git Repository is present in Database, Rest GitHub api is not able to respond for any reason, commits are retrieved from the Command Line Interface and stored in the DB, a representation is returned.
 
 ## Architecture
 
