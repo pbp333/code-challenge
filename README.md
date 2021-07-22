@@ -22,7 +22,7 @@ Two schemas should be setup, one for application usage, the other for integratio
 
 ### Application Server setup (Apache Tomcat)
 
--   Download Apache Tomcat - https://tomcat.apache.org/download-80.cgi
+-   Download Apache Tomcat [Download](https://tomcat.apache.org/download-80.cgi)
 
 #### Linux
 -   Extract files;
@@ -117,7 +117,3 @@ Provides contract for persistence layer interaction (Repository).
 
 ### Infrastructure
 Provides the Application/Core layers with the implementations (adapters/repositories) required to function;
-
-## License
-
-(TODO) License 
