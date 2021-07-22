@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                pattern="%d{ISO8601} [%t] - $${sys:env} - %-5level %logger{36} - %X - %msg%n%ex" />
+        </Console>
+        <RollingFile name="RollingFile" fileName="${sys:catalina.home}/logs/commit_viewer.log"
+            filePattern="logs/$${date:yyyy-MM}/commit_viewer-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d{ISO8601} [%t] - $${sys:env} - %-5level %logger{36} - %X - %msg%n%ex</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB" />
+            </Policies>
+        </RollingFile>
+        <Async name="Async">
+            <AppenderRef ref="RollingFile" />
+            <AppenderRef ref="Console" />
+        </Async>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Async" />
+        </Root>
+        <Logger name="org.springframework" level="warn" additivity="false">
+            <AppenderRef ref="Async" />
+        </Logger>
+        <Logger name="org.springframework.web.servlet" level="info" additivity="false">
+            <AppenderRef ref="Async" />
+        </Logger>
+    </Loggers>
+</Configuration>

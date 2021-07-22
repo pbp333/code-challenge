@@ -29,16 +29,15 @@ Two schemas should be setup, one for application usage, the other for integratio
 -   chmod +x startup.sh (allows the execution of the startup.sh script)
 -   chmod +x catalina.sh (allows the execution of the startup.sh script)
 -   chmod +x shutdown.sh (allows the execution of the startup.sh script)
+-   copy WAR ({project_foler}/target) file to {tomcat_folder}/webapps
 -   start server - ./startup.sh
 -   stop server - ./shutdown.sh
 
 #### Windows
 -   Extract files;
--   chmod +x startup.sh (UNIX only - allows for the exceution of the startup.sh script)
--   chmod +x catalina.sh (UNIX only - allows for the exceution of the startup.sh script)
--   chmod +x shutdown.sh (UNIX only - allows for the exceution of the startup.sh script)
--   start server - ./startup.sh
--   stop server - ./shutdown.sh
+-   copy WAR ({project_foler}/target) file to {tomcat_folder}/webapps
+-   start server - startup.bat
+-   stop server - shutdown.bat
  
 #### Configuration File
 
@@ -84,8 +83,8 @@ Test data stored in Integration tests will be purged after each test.
 Provides commits of a given git repository url (mandatory), pagination is optional.
 Pagination has a default value of page = 1, size = 5, if no values are provided.
 
-(note: tomcat app url should be 'http://localhost:8080/commit-viewer-0.0.1-SNAPSHOT')
-(note: spring boot (Eclipse/IntelliJ) url should be 'http://localhost:8080')
+(note: tomcat app_url should be 'http://localhost:8080/commit-viewer-0.0.1-SNAPSHOT')
+(note: spring boot (Eclipse/IntelliJ) app_url should be 'http://localhost:8080')
 
 #### Flow
 -   User request, through the Web api;

@@ -1,8 +1,6 @@
 package com.codechallenge.commitviewer.web.controller;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,14 +13,14 @@ import com.codechallenge.commitviewer.web.json.ErrorJson;
 
 public abstract class ErrorController {
 
-    private static final Logger LOGGER = Logger.getGlobal();
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(ErrorController.class);
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ErrorJson handleGeneric(Exception exception) {
 
-        LOGGER.log(Level.ALL, exception.getMessage(), exception);
+        LOGGER.error(exception.getMessage(), exception);
 
         var message = "An unexpected error has ocurred.";
 
@@ -34,7 +32,7 @@ public abstract class ErrorController {
     @ResponseBody
     public ErrorJson handleBusinessError(BusinessException exception) {
 
-        LOGGER.log(Level.ALL, exception.getMessage(), exception);
+        LOGGER.error(exception.getMessage(), exception);
 
         return ErrorJson.from(exception.getMessage());
     }
@@ -44,7 +42,7 @@ public abstract class ErrorController {
     @ResponseBody
     public ErrorJson handleApplicationError(ApplicationException exception) {
 
-        LOGGER.log(Level.ALL, exception.getMessage(), exception);
+        LOGGER.error(exception.getMessage(), exception);
 
         return ErrorJson.from(exception.getMessage());
     }
@@ -54,7 +52,7 @@ public abstract class ErrorController {
     @ResponseBody
     public ErrorJson handleTechnicalError(TechnicalException exception) {
 
-        LOGGER.log(Level.ALL, exception.getMessage(), exception);
+        LOGGER.error(exception.getMessage(), exception);
 
         return ErrorJson.from(exception.getMessage());
     }

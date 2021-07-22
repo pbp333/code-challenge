@@ -1,10 +1,10 @@
 package com.codechallenge.commitviewer.application;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ import com.codechallenge.commitviewer.application.port.rest.GitRepositoryCommitR
 @Service
 public class CommitApplicationServiceImpl implements CommitApplicationService {
 
-    private static final Logger LOGGER = Logger.getGlobal();
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommitApplicationServiceImpl.class);
 
     private final CommitRetrieverCliPort cliPort;
     private final CommitRetrieverRestPort restPort;
@@ -42,14 +42,14 @@ public class CommitApplicationServiceImpl implements CommitApplicationService {
 
         if (repository.existsByUrl(request.getRequest())) {
 
-            LOGGER.warning("Retrieving commits from DB");
+            LOGGER.warn("Retrieving commits from DB");
 
             return repository
                     .findCommitsByRepositoryUrlPaginated(request.getRequest(), request.getPage(), request.getSize())
                     .stream().map(CommitMapper::map).collect(Collectors.toList());
         }
 
-        LOGGER.warning("Failed retrieving commits from DB. Fetching from external source");
+        LOGGER.warn("Failed retrieving commits from DB. Fetching from external source");
 
         return fetchCommitsFromExtrernalSource(request);
 
@@ -65,7 +65,7 @@ public class CommitApplicationServiceImpl implements CommitApplicationService {
 
         try {
 
-            LOGGER.warning("Retrieving commits with Rest Adapter");
+            LOGGER.warn("Retrieving commits with Rest Adapter");
 
             var restRequest = GitRepositoryCommitRestRequest.from(repositoryName, ownerName,
                     PageRequest.from(request.getPage(), request.getSize()));
@@ -80,8 +80,8 @@ public class CommitApplicationServiceImpl implements CommitApplicationService {
 
         } catch (TechnicalException e) {
 
-            LOGGER.log(Level.ALL, e.getMessage(), e);
-            LOGGER.warning("Failed to retrieve commits with Rest Adapter. Retrying with Cli Adapter");
+            LOGGER.error(e.getMessage(), e);
+            LOGGER.warn("Failed to retrieve commits with Rest Adapter. Retrying with Cli Adapter");
 
             var cliRequest = GitRepositoryCommitCliRequest.from(request.getRequest(),
                     PageRequest.from(request.getPage(), request.getSize()));
