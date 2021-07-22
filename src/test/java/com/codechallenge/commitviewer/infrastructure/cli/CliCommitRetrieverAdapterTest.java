@@ -15,6 +15,7 @@ import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -64,7 +65,9 @@ public class CliCommitRetrieverAdapterTest {
 
         when(mockFile.getAbsolutePath()).thenReturn("absolutePath");
 
-        when(cli.excuteCommand(any(String[].class), any(File.class))).thenReturn(Collections.emptyList())
+        var captor = ArgumentCaptor.forClass(String[].class);
+
+        when(cli.excuteCommand(captor.capture(), any(File.class))).thenReturn(Collections.emptyList())
                 .thenReturn(Arrays.asList(expectedProjectFolder)).thenReturn(Arrays.asList(commit));
 
         when(fileManager.removeTemporaryFolderAndContents(any(File.class))).thenReturn(true);
@@ -79,6 +82,36 @@ public class CliCommitRetrieverAdapterTest {
         assertThat(response.get(0).getAuthorName()).isEqualTo(authorName);
         assertThat(response.get(0).getDate()).isEqualTo(expectedDate);
         assertThat(response.get(0).getMessage()).isEqualTo(message);
+
+        var cliArguments = captor.getAllValues();
+
+        assertThat(cliArguments.size()).isEqualTo(3);
+
+        var gitCloneArguments = cliArguments.get(0);
+
+        assertThat(gitCloneArguments).hasSize(3);
+        assertThat(gitCloneArguments[0]).isEqualTo("git");
+        assertThat(gitCloneArguments[1]).isEqualTo("clone");
+        assertThat(gitCloneArguments[2]).isEqualTo(request.getUrl());
+
+        var retrieveRepositoryFolderArguments = cliArguments.get(1);
+
+        assertThat(retrieveRepositoryFolderArguments).hasSize(1);
+        assertThat(retrieveRepositoryFolderArguments[0]).isEqualTo("ls");
+
+        var retrieveCommitsArguments = cliArguments.get(2);
+
+        var numberOfCommitsToSkip = request.getPageRequest().getSize() * (request.getPageRequest().getPage() - 1);
+
+        var sizeArgument = String.format("--max-count=%d", request.getPageRequest().getSize());
+        var numberOfCommitsToSkipArgument = String.format("--skip=%d", numberOfCommitsToSkip);
+
+        assertThat(retrieveCommitsArguments).hasSize(5);
+        assertThat(retrieveCommitsArguments[0]).isEqualTo("git");
+        assertThat(retrieveCommitsArguments[1]).isEqualTo("log");
+        assertThat(retrieveCommitsArguments[2]).isEqualTo("--pretty=%H-%cn-%ct-%s");
+        assertThat(retrieveCommitsArguments[3]).isEqualTo(sizeArgument);
+        assertThat(retrieveCommitsArguments[4]).isEqualTo(numberOfCommitsToSkipArgument);
 
     }
 
