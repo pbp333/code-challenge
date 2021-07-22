@@ -7,11 +7,12 @@ public interface GitRepositoryRepository {
 
     GitRepository save(GitRepository gitRepository);
 
-    Optional<GitRepository> findByOwnerNameAndName(String ownerName, String name);
-
     void delete(GitRepository gitRepository);
 
-    List<Commit> findCommitsByRepositoryNameAndOwnerPaginated(String repositoryName, String ownerName, int page,
-            int size);
+    boolean existsByUrl(String url);
+
+    Optional<GitRepository> findByUrl(String url);
+
+    List<Commit> findCommitsByRepositoryUrlPaginated(String url, int page, int size);
 
 }

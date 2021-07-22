@@ -40,24 +40,32 @@ public class CommitApplicationServiceImpl implements CommitApplicationService {
     @Override
     public List<CommitDto> getCommits(PaginatedRequest<String> request) {
 
+        if (repository.existsByUrl(request.getRequest())) {
+
+            LOGGER.warning("Retrieving commits from DB");
+
+            return repository
+                    .findCommitsByRepositoryUrlPaginated(request.getRequest(), request.getPage(), request.getSize())
+                    .stream().map(CommitMapper::map).collect(Collectors.toList());
+        }
+
+        LOGGER.warning("Failed retrieving commits from DB. Fetching from external source");
+
+        return fetchCommitsFromExtrernalSource(request);
+
+    }
+
+    private List<CommitDto> fetchCommitsFromExtrernalSource(PaginatedRequest<String> request) {
+
         var repositoryName = GitUrlUtils.extractRepositoryName(request.getRequest());
         var ownerName = GitUrlUtils.extractOwnerName(request.getRequest());
 
-        // Rest Api initial page is 1, repository initial page is 0
-        int repositoryPage = request.getPage() - 1;
-
-        var commits = repository.findCommitsByRepositoryNameAndOwnerPaginated(repositoryName, ownerName, repositoryPage,
-                request.getSize());
-
-        if (!commits.isEmpty())
-            return commits.stream().map(CommitMapper::map).collect(Collectors.toList());
-
-        LOGGER.warning("Failed retrieving commits from DB.Retrying with Rest Adapter");
-
-        var gitRepository = repository.findByOwnerNameAndName(ownerName, repositoryName)
-                .orElseGet(() -> GitRepository.builder().name(repositoryName).ownerName(ownerName).build());
+        var gitRepository =
+                GitRepository.builder().name(repositoryName).ownerName(ownerName).url(request.getRequest()).build();
 
         try {
+
+            LOGGER.warning("Retrieving commits with Rest Adapter");
 
             var restRequest = GitRepositoryCommitRestRequest.from(repositoryName, ownerName,
                     PageRequest.from(request.getPage(), request.getSize()));
@@ -73,7 +81,7 @@ public class CommitApplicationServiceImpl implements CommitApplicationService {
         } catch (TechnicalException e) {
 
             LOGGER.log(Level.ALL, e.getMessage(), e);
-            LOGGER.warning("Failed retrieving commits with Rest Adapter.Retrying with Cli Adapter");
+            LOGGER.warning("Failed to retrieve commits with Rest Adapter. Retrying with Cli Adapter");
 
             var cliRequest = GitRepositoryCommitCliRequest.from(request.getRequest(),
                     PageRequest.from(request.getPage(), request.getSize()));
@@ -86,7 +94,6 @@ public class CommitApplicationServiceImpl implements CommitApplicationService {
 
             return commitDtos;
         }
-
     }
 
 }

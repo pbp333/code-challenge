@@ -28,21 +28,28 @@ public class GitRepositoryRepositoryImpl implements GitRepositoryRepository {
     }
 
     @Override
-    public Optional<GitRepository> findByOwnerNameAndName(String ownerName, String name) {
-        return jpaRepository.findByOwnerNameAndName(ownerName, name);
-    }
-
-    @Override
     public void delete(GitRepository gitRepository) {
         jpaRepository.delete(gitRepository);
     }
 
     @Override
-    public List<Commit> findCommitsByRepositoryNameAndOwnerPaginated(String repositoryName, String ownerName, int page,
-            int size) {
+    public boolean existsByUrl(String url) {
+        return jpaRepository.existsByUrl(url);
+    }
 
-        Pageable pageable = PageRequest.of(page, size);
+    @Override
+    public Optional<GitRepository> findByUrl(String url) {
+        return jpaRepository.findByUrl(url);
+    }
 
-        return jpaRepository.findCommitsByRepositoryNameAndOwner(ownerName, repositoryName, pageable);
+    @Override
+    public List<Commit> findCommitsByRepositoryUrlPaginated(String url, int page, int size) {
+
+        // DB initial page is 0
+        var repositoryPage = page - 1;
+
+        Pageable pageable = PageRequest.of(repositoryPage, size);
+
+        return jpaRepository.findCommitsByRepositoryUrlPaginated(url, pageable);
     }
 }

@@ -8,10 +8,6 @@ public class ApplicationException extends RuntimeException {
     private ApplicationException() {
     }
 
-    public ApplicationException(String message, Throwable trowable) {
-        super(message, trowable);
-    }
-
     public ApplicationException(String message) {
         super(message);
     }

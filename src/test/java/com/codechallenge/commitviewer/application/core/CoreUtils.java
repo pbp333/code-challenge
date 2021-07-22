@@ -33,9 +33,10 @@ public class CoreUtils {
 
         var ownerName = RandomString.make(10);
         var name = RandomString.make(10);
-        var commits = Stream.of(CoreUtils.getRandomCommit(), CoreUtils.getRandomCommit()).collect(Collectors.toSet());
+        var url = RandomString.make(10);
+        var commits = Stream.of(getRandomCommit(), getRandomCommit()).collect(Collectors.toSet());
 
-        return GitRepository.builder().ownerName(ownerName).name(name).commits(commits);
+        return GitRepository.builder().ownerName(ownerName).name(name).url(url).commits(commits);
     }
 
 }

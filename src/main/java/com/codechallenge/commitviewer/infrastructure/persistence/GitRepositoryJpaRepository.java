@@ -17,8 +17,11 @@ public interface GitRepositoryJpaRepository extends JpaRepository<GitRepository,
 
     Optional<GitRepository> findByOwnerNameAndName(String ownerName, String name);
 
-    @Query("select c from GitRepository gr join gr.commits c where gr.name = :repositoryName and gr.ownerName = :ownerName order by c.date desc")
-    List<Commit> findCommitsByRepositoryNameAndOwner(@Param("ownerName") String ownerName,
-            @Param("repositoryName") String repositoryName, Pageable pageable);
+    boolean existsByUrl(String url);
+
+    Optional<GitRepository> findByUrl(String url);
+
+    @Query("select c from GitRepository gr join gr.commits c where gr.url = :url order by c.date desc")
+    List<Commit> findCommitsByRepositoryUrlPaginated(@Param("url") String url, Pageable pageable);
 
 }

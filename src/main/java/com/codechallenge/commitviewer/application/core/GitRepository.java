@@ -33,6 +33,9 @@ public class GitRepository {
     @Column(name = "NAME")
     private String name;
 
+    @Column(name = "url")
+    private String url;
+
     @JoinColumn(name = "GIT_REPOSITORY_ID")
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Commit> commits = new HashSet<>();
@@ -45,6 +48,7 @@ public class GitRepository {
     private GitRepository(Builder builder) {
         this.ownerName = builder.ownerName;
         this.name = builder.name;
+        this.url = builder.url;
         this.commits.addAll(builder.commits);
     }
 
@@ -64,6 +68,10 @@ public class GitRepository {
         return name;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
     public Set<Commit> getCommits() {
         return Collections.unmodifiableSet(commits);
     }
@@ -75,6 +83,7 @@ public class GitRepository {
     public static class Builder {
         private String ownerName;
         private String name;
+        private String url;
         private Set<Commit> commits;
 
         private Builder() {
@@ -91,6 +100,11 @@ public class GitRepository {
             return this;
         }
 
+        public Builder url(String url) {
+            this.url = url;
+            return this;
+        }
+
         public Builder commits(Set<Commit> commits) {
             this.commits = commits;
             return this;
@@ -100,6 +114,7 @@ public class GitRepository {
 
             validateOwnerName();
             validateName();
+            validateUrl();
 
             if (this.commits == null)
                 this.commits = Collections.emptySet();
@@ -118,6 +133,13 @@ public class GitRepository {
 
             if (this.name == null || this.name.isEmpty())
                 throw new BusinessException("Name is invalid");
+
+        }
+
+        private void validateUrl() {
+
+            if (this.url == null || this.url.isEmpty())
+                throw new BusinessException("Url is invalid");
 
         }
     }

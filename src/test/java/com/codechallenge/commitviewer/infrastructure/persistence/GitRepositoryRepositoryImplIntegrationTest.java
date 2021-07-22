@@ -41,11 +41,12 @@ public class GitRepositoryRepositoryImplIntegrationTest {
         // When
         repository.save(gitRepository);
 
-        var gitRepositoryFromDBOptional =
-                repository.findByOwnerNameAndName(gitRepository.getOwnerName(), gitRepository.getName());
+        var gitRepositoryExists = repository.existsByUrl(gitRepository.getUrl());
+
+        var gitRepositoryFromDBOptional = repository.findByUrl(gitRepository.getUrl());
 
         // Then
-        assertThat(gitRepositoryFromDBOptional).isNotNull().isPresent();
+        assertThat(gitRepositoryExists).isTrue();
 
         var gitRepositoryFromDB = gitRepositoryFromDBOptional.get();
 
@@ -66,7 +67,7 @@ public class GitRepositoryRepositoryImplIntegrationTest {
     }
 
     @Test
-    public void canFindCommitsByGitRepositoryNameAndOwnerName() {
+    public void canFindCommitsByGitRepositoryUrl() {
 
         // Given
         var gitRepositoryBuilder = CoreUtils.getRandomGitRepositoryBuilder();
@@ -79,12 +80,11 @@ public class GitRepositoryRepositoryImplIntegrationTest {
 
         var gitRepositoryFromDB = repository.save(gitRepository);
 
-        int page = 0;
+        int page = 1;
         int size = 10;
 
         // When
-        var commits = repository.findCommitsByRepositoryNameAndOwnerPaginated(gitRepository.getName(),
-                gitRepository.getOwnerName(), page, size);
+        var commits = repository.findCommitsByRepositoryUrlPaginated(gitRepository.getUrl(), page, size);
 
         // Then
         assertThat(commits).isNotNull().hasSize(1);
@@ -101,7 +101,7 @@ public class GitRepositoryRepositoryImplIntegrationTest {
     }
 
     @Test
-    public void canFindCommitsByGitRepositoryNameAndOwnerNameResultsAreOrderedByDateDesc() {
+    public void canFindCommitsByGitRepositoryUrlResultsAreOrderedByDateDesc() {
 
         // Given
         var gitRepositoryBuilder = CoreUtils.getRandomGitRepositoryBuilder();
@@ -116,12 +116,11 @@ public class GitRepositoryRepositoryImplIntegrationTest {
 
         var gitRepositoryFromDB = repository.save(gitRepository);
 
-        int page = 0;
+        int page = 1;
         int size = 10;
 
         // When
-        var commits = repository.findCommitsByRepositoryNameAndOwnerPaginated(gitRepository.getName(),
-                gitRepository.getOwnerName(), page, size);
+        var commits = repository.findCommitsByRepositoryUrlPaginated(gitRepository.getUrl(), page, size);
 
         // Then
         assertThat(commits).isNotNull().hasSize(2);
@@ -138,7 +137,7 @@ public class GitRepositoryRepositoryImplIntegrationTest {
     }
 
     @Test
-    public void canFindCommitsByGitRepositoryNameAndOwnerNamePaginated() {
+    public void canFindCommitsByGitRepositoryUrlPaginated() {
 
         // Given
         var gitRepositoryBuilder = CoreUtils.getRandomGitRepositoryBuilder();
@@ -150,12 +149,11 @@ public class GitRepositoryRepositoryImplIntegrationTest {
 
         var gitRepositoryFromDB = repository.save(gitRepository);
 
-        int page = 0;
+        int page = 1;
         int size = 1;
 
         // When
-        var commits = repository.findCommitsByRepositoryNameAndOwnerPaginated(gitRepository.getName(),
-                gitRepository.getOwnerName(), page, size);
+        var commits = repository.findCommitsByRepositoryUrlPaginated(gitRepository.getUrl(), page, size);
 
         // Then
         assertThat(commits).isNotNull().hasSize(1);
@@ -177,15 +175,13 @@ public class GitRepositoryRepositoryImplIntegrationTest {
 
         repository.save(gitRepository);
 
-        var gitRepositoryFromDB =
-                repository.findByOwnerNameAndName(gitRepository.getOwnerName(), gitRepository.getName());
+        var gitRepositoryFromDB = repository.findByUrl(gitRepository.getUrl());
 
         // When
         repository.delete(gitRepositoryFromDB.get());
 
         // Then
-        var gitRepositoryFromDBAfterDElete =
-                repository.findByOwnerNameAndName(gitRepository.getOwnerName(), gitRepository.getName());
+        var gitRepositoryFromDBAfterDElete = repository.findByUrl(gitRepository.getUrl());
 
         assertThat(gitRepositoryFromDBAfterDElete).isNotNull().isNotPresent();
 
