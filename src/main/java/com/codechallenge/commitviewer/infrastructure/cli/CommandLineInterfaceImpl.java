@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommandLineInterfaceImpl implements CommandLineInterface {
 
-    private static final int COMMAND_PERMITED_TIMEOUT_IN_SECONDS = 60;
+    private static final int COMMAND_PERMITED_TIMEOUT_IN_SECONDS = 30;
 
     @Override
     public List<String> excuteCommand(String[] commands, File folder) throws IOException, InterruptedException {
@@ -24,22 +24,22 @@ public class CommandLineInterfaceImpl implements CommandLineInterface {
         var process = builder.start();
         var reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-        List<String> log = new ArrayList<>();
+        List<String> result = new ArrayList<>();
 
         var line = "";
 
         while ((line = reader.readLine()) != null) {
-            log.add(line);
+            result.add(line);
         }
 
-        if (process.waitFor(COMMAND_PERMITED_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS))
+        if (!process.waitFor(COMMAND_PERMITED_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS))
             throw new IOException(
                     "Command execution took longer than permited: " + COMMAND_PERMITED_TIMEOUT_IN_SECONDS + " secs");
 
         process.destroy();
         reader.close();
 
-        return log;
+        return result;
     }
 
 }
