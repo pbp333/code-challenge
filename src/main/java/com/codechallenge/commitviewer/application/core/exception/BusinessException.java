@@ -1,4 +1,4 @@
-package com.codechallenge.commitviewer.application.exception;
+package com.codechallenge.commitviewer.application.core.exception;
 
 public class BusinessException extends RuntimeException {
 

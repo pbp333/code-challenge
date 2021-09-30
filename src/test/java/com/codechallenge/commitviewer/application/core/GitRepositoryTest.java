@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.Test;
 
-import com.codechallenge.commitviewer.application.exception.BusinessException;
+import com.codechallenge.commitviewer.application.core.exception.BusinessException;
 
 public class GitRepositoryTest {
 

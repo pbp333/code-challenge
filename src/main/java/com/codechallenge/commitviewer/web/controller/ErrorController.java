@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.codechallenge.commitviewer.application.core.exception.BusinessException;
 import com.codechallenge.commitviewer.application.exception.ApplicationException;
-import com.codechallenge.commitviewer.application.exception.BusinessException;
 import com.codechallenge.commitviewer.application.exception.TechnicalException;
 import com.codechallenge.commitviewer.web.json.ErrorJson;
 

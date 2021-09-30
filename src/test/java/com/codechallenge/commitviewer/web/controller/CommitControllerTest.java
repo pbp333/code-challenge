@@ -20,8 +20,8 @@ import org.springframework.util.MultiValueMap;
 import com.codechallenge.commitviewer.application.api.ApiUtils;
 import com.codechallenge.commitviewer.application.api.CommitApplicationService;
 import com.codechallenge.commitviewer.application.api.request.PaginatedRequest;
+import com.codechallenge.commitviewer.application.core.exception.BusinessException;
 import com.codechallenge.commitviewer.application.exception.ApplicationException;
-import com.codechallenge.commitviewer.application.exception.BusinessException;
 import com.codechallenge.commitviewer.application.exception.TechnicalException;
 
 public class CommitControllerTest extends AbstractControllerTest<CommitController> {

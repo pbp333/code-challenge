@@ -16,7 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.codechallenge.commitviewer.application.exception.BusinessException;
+import com.codechallenge.commitviewer.application.core.exception.BusinessException;
 
 @Entity
 @Table(name = "GIT_REPOSITORY")
