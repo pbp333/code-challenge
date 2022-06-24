@@ -11,6 +11,8 @@ import com.codechallenge.commitviewer.application.core.exception.BusinessExcepti
 
 public class CommitTest {
 
+    // adding comment
+
     @Test
     public void canBuild() {
 
