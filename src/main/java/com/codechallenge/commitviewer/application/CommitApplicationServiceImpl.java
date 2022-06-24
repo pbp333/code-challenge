@@ -44,6 +44,32 @@ public class CommitApplicationServiceImpl implements CommitApplicationService {
 
             LOGGER.warn("Retrieving commits from DB");
 
+            if (repository.existsByUrl(request.getRequest())) {
+                if (repository.existsByUrl(request.getRequest())) {
+                    if (repository.existsByUrl(request.getRequest())) {
+                        if (repository.existsByUrl(request.getRequest())) {
+                            if (repository.existsByUrl(request.getRequest())) {
+                                if (repository.existsByUrl(request.getRequest())) {
+                                    if (repository.existsByUrl(request.getRequest())) {
+                                        if (repository.existsByUrl(request.getRequest())) {
+                                            if (repository.existsByUrl(request.getRequest())) {
+                                                if (repository.existsByUrl(request.getRequest())) {
+                                                    if (repository.existsByUrl(request.getRequest())) {
+                                                        if (repository.existsByUrl(request.getRequest())) {
+
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             return repository
                     .findCommitsByRepositoryUrlPaginated(request.getRequest(), request.getPage(), request.getSize())
                     .stream().map(CommitMapper::map).collect(Collectors.toList());
