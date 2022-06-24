@@ -16,6 +16,8 @@ import com.codechallenge.commitviewer.application.core.exception.BusinessExcepti
 @Table(name = "COMMIT")
 public class Commit {
 
+    // adding comment for tests
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
