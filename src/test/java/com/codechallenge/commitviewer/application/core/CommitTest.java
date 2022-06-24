@@ -50,6 +50,40 @@ public class CommitTest {
         assertThat(equals).isTrue();
     }
 
+    @Test
+    public void canEqualsNull() {
+
+        // Given
+        var sha = RandomString.make(10);
+        var message = RandomString.make(10);
+        var date = Instant.now();
+        var authorName = RandomString.make(10);
+
+        var commit = Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+        // When
+        var equals = commit.equals(null);
+
+        // Then
+        assertThat(equals).isFalse();
+    }
+
+    @Test
+    public void canEqualsDifferentType() {
+
+        // Given
+        var sha = RandomString.make(10);
+        var message = RandomString.make(10);
+        var date = Instant.now();
+        var authorName = RandomString.make(10);
+
+        var commit = Commit.builder().sha(sha).message(message).date(date).authorName(authorName).build();
+        // When
+        var equals = commit.equals("");
+
+        // Then
+        assertThat(equals).isFalse();
+    }
+
     @Test(expected = BusinessException.class)
     public void exceptionWhenShaIsNull() {
 
