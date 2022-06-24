@@ -8,6 +8,7 @@ import com.codechallenge.commitviewer.application.api.request.PaginatedRequest;
 public interface CommitApplicationService {
 
     // add comment for tests
+    // another
 
     List<CommitDto> getCommits(PaginatedRequest<String> request);
 
