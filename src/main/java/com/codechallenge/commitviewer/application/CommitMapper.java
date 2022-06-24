@@ -13,7 +13,7 @@ public class CommitMapper {
 
         var commitBuilder = Commit.builder();
 
-        commitBuilder.sha(dto.getSha());
+        commitBuilder.sha(dto.getSha().toString());
         commitBuilder.authorName(dto.getAuthorName());
         commitBuilder.date(dto.getDate());
         commitBuilder.message(dto.getMessage());
