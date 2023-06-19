@@ -48,7 +48,7 @@ public class GitRepositoryRepositoryImpl implements GitRepositoryRepository {
         // DB initial page is 0
         var repositoryPage = page - 1;
 
-        Pageable pageable = PageRequest.of(repositoryPage, size);
+        var pageable = PageRequest.of(repositoryPage, size);
 
         return jpaRepository.findCommitsByRepositoryUrlPaginated(url, pageable);
     }
